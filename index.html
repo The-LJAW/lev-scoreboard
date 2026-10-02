@@ -1,0 +1,1331 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="Every compound the NIA Interventions Testing Program has tested for mouse lifespan: what happened in each sex, and where the human evidence stands.">
+<meta property="og:title" content="The LEV Scoreboard">
+<meta property="og:description" content="Every compound the NIA Interventions Testing Program has tested for mouse lifespan: what happened in each sex, and where the human evidence stands.">
+<meta property="og:type" content="website">
+<link rel="canonical" href="https://the-ljaw.github.io/lev-scoreboard/">
+<meta property="og:url" content="https://the-ljaw.github.io/lev-scoreboard/">
+</head>
+<body>
+<title>The LEV Scoreboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500..800&family=Atkinson+Hyperlegible:wght@400;700&family=Source+Serif+4:opsz,wght@8..60,400..600&display=swap">
+<style>
+/* =====================================================================
+   The LEV Scoreboard — page styles.
+   Everything the page says about compounds comes from data/scoreboard.json.
+   Colors are tokens: light values on :root, dark values in the two blocks below.
+   ===================================================================== */
+:root{
+  --bg:#F4F7F3; --surface:#FFFFFF; --surface-2:#EEF3EF;
+  --ink:#0F1D16; --ink-2:#3B4A42; --ink-3:#59685F;
+  --line:#D7E0D9; --line-2:#B8C4BB;
+  --link:#0A5C38; --accent:#0E7346; --accent-hover:#0A5C38; --accent-soft:#E1F0E7; --on-accent:#FFFFFF;
+  /* ITP result colors (validated for color-vision deficiency; always paired with a shape and a word) */
+  --ext:#0E7346; --short:#C2385F; --none:#C5CEC7; --none-edge:#7F8C84;
+  --tlong:#8CC3A4; --tshort:#E8A0B5; --bar-none:#A9B4AC; --bar-track:#E9EFEA;
+  /* LEV editorial grade colors (deliberately a different hue family from the ITP results) */
+  --grade:#2D4F86; --grade-soft:#EEF2F9; --grade-line:#BCCAE4;
+  --draft-ink:#7A4E00; --draft-bg:#FFF2CC; --draft-line:#C9962A;
+  --focus:#0E7346; --tip-bg:#0F1D16; --tip-ink:#F4F7F3;
+  --shadow:0 1px 2px rgb(15 29 22 / .06), 0 8px 24px rgb(15 29 22 / .08);
+  --font-ui:"Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-head:"Archivo", "Helvetica Neue", Arial, sans-serif;
+  --font-serif:"Source Serif 4", Georgia, "Times New Roman", serif;
+  --wrap:1120px; --gutter:16px; --sticky-h:64px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0C1310; --surface:#141D18; --surface-2:#1A2620;
+    --ink:#E7EFE9; --ink-2:#BAC8BF; --ink-3:#93A39A;
+    --line:#26332C; --line-2:#3A4A41;
+    --link:#6BD6A0; --accent:#46C285; --accent-hover:#6BD6A0; --accent-soft:#163225; --on-accent:#06130C;
+    --ext:#25A473; --short:#B0416B; --none:#3F4B44; --none-edge:#66736B;
+    --tlong:#1F6A4C; --tshort:#6E3049; --bar-none:#4A5850; --bar-track:#1F2B25;
+    --grade:#A9C1F2; --grade-soft:#151E2C; --grade-line:#31446A;
+    --draft-ink:#F3D27E; --draft-bg:#2E240C; --draft-line:#8C6A1E;
+    --focus:#6BD6A0; --tip-bg:#E7EFE9; --tip-ink:#0C1310;
+    --shadow:0 1px 2px rgb(0 0 0 / .3), 0 8px 24px rgb(0 0 0 / .35);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0C1310; --surface:#141D18; --surface-2:#1A2620;
+  --ink:#E7EFE9; --ink-2:#BAC8BF; --ink-3:#93A39A;
+  --line:#26332C; --line-2:#3A4A41;
+  --link:#6BD6A0; --accent:#46C285; --accent-hover:#6BD6A0; --accent-soft:#163225; --on-accent:#06130C;
+  --ext:#25A473; --short:#B0416B; --none:#3F4B44; --none-edge:#66736B;
+  --tlong:#1F6A4C; --tshort:#6E3049; --bar-none:#4A5850; --bar-track:#1F2B25;
+  --grade:#A9C1F2; --grade-soft:#151E2C; --grade-line:#31446A;
+  --draft-ink:#F3D27E; --draft-bg:#2E240C; --draft-line:#8C6A1E;
+  --focus:#6BD6A0; --tip-bg:#E7EFE9; --tip-ink:#0C1310;
+  --shadow:0 1px 2px rgb(0 0 0 / .3), 0 8px 24px rgb(0 0 0 / .35);
+  color-scheme:dark;
+}
+@media (min-width:720px){ :root{ --gutter:24px; } }
+
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 1rem/1.55 var(--font-ui);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+[hidden]{display:none!important}
+img,svg{max-width:100%}
+a{color:var(--link);text-decoration-thickness:1px;text-underline-offset:.18em}
+a:hover{text-decoration-thickness:2px}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px;border-radius:4px}
+button{font:inherit;color:inherit}
+h1,h2,h3,h4{text-wrap:balance}
+p,li,dd{text-wrap:pretty}
+code{font:600 .9em/1.2 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.sr{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+.wrap{max-width:var(--wrap);margin-inline:auto;padding-inline:var(--gutter)}
+.skip{position:absolute;left:12px;top:-60px;z-index:100;background:var(--surface);color:var(--ink);padding:10px 14px;border-radius:8px;box-shadow:var(--shadow)}
+.skip:focus{top:12px}
+.muted{color:var(--ink-3)}
+.label{font:700 .6875rem/1.3 var(--font-head);letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3)}
+
+/* ---------- review banner ---------- */
+.review{background:var(--draft-bg);color:var(--ink);border-bottom:1px dashed var(--draft-line);font-size:.875rem}
+.review .wrap{display:flex;flex-wrap:wrap;gap:4px 14px;align-items:baseline;padding-block:9px}
+.review b{font:800 .6875rem/1.4 var(--font-head);letter-spacing:.1em;text-transform:uppercase;color:var(--draft-ink)}
+.review .rb-more{display:none}
+@media (min-width:720px){.review .rb-more{display:inline}}
+
+/* ---------- masthead ---------- */
+.masthead{background:var(--surface);border-bottom:1px solid var(--line)}
+.masthead .wrap{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 24px;padding-block:12px}
+.wordmark{display:inline-flex;align-items:center;gap:10px;color:var(--ink);text-decoration:none;font:800 1.0625rem/1.2 var(--font-head);letter-spacing:-.005em}
+.wordmark .inst{font-weight:500;color:var(--ink-3)}
+.wordmark:hover{text-decoration:none}
+.topnav{display:flex;flex-wrap:wrap;gap:2px 16px;font-size:.875rem}
+@media (min-width:720px){.topnav{font-size:.9375rem;gap:2px 20px}}
+.topnav a{color:var(--ink-2);text-decoration:none;padding-block:4px}
+.topnav a:hover{color:var(--ink);text-decoration:underline}
+
+/* ---------- split tile: left half = males, right half = females ---------- */
+.tile{--t:22px;display:inline-grid;grid-template-columns:1fr 1fr;gap:2px;width:var(--t);height:var(--t);flex:none;vertical-align:middle}
+.tile i{display:block}
+.tile i:first-child{border-radius:4px 0 0 4px}
+.tile i:last-child{border-radius:0 4px 4px 0}
+.tile .ext{background:var(--ext)}
+.tile .short{background:var(--short)}
+.tile .none{background:var(--none);box-shadow:inset 0 0 0 1px var(--none-edge)}
+.tile.sm{--t:18px}
+.tile.lg{--t:30px}
+.tile.brand i{background:var(--accent)}
+.tile.brand i:last-child{opacity:.55}
+
+/* ---------- hero ---------- */
+.hero{padding-block:32px 8px}
+@media (min-width:880px){.hero{padding-block:52px 12px}}
+.hero-grid{display:grid;grid-template-columns:minmax(0,1fr);grid-template-areas:"eb" "h1" "stats" "lede" "disc"}
+.hero-grid .eyebrow{grid-area:eb} .hero-grid h1{grid-area:h1} .hero-grid .stats{grid-area:stats} .hero-grid .lede{grid-area:lede} .hero-grid .disclaim{grid-area:disc}
+@media (min-width:1024px){
+  .hero-grid{grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);grid-template-areas:"eb eb" "h1 stats" "lede stats" "disc stats";column-gap:64px}
+  .hero-grid .stats{align-self:center;grid-template-columns:repeat(2,minmax(0,1fr));margin-top:0}
+}
+.eyebrow{margin:0 0 14px;font:700 .75rem/1.3 var(--font-head);letter-spacing:.11em;text-transform:uppercase;color:var(--accent-hover)}
+.hero h1{margin:0;max-width:24ch;font:750 clamp(1.625rem,1.1rem + 2.4vw,2.75rem)/1.12 var(--font-head);letter-spacing:-.018em}
+.hero h1 em{font-style:normal;color:var(--accent-hover);background:linear-gradient(transparent 62%,var(--accent-soft) 62%);padding-inline:.06em}
+.lede{max-width:64ch;margin:18px 0 0;font-size:1.0625rem;color:var(--ink-2)}
+.disclaim{display:flex;gap:8px;align-items:flex-start;max-width:72ch;margin:14px 0 0;font-size:.875rem;color:var(--ink-3)}
+.disclaim svg{flex:none;width:16px;height:16px;margin-top:3px}
+.stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 16px;margin:24px 0 4px;padding:0;list-style:none}
+@media (min-width:760px){.stats{grid-template-columns:repeat(4,minmax(0,1fr));gap:24px}}
+.stat{border-top:3px solid var(--line-2);padding-top:10px;min-width:0}
+.stat.pos{border-top-color:var(--ext)}
+.stat.neg{border-top-color:var(--none-edge)}
+.stat .n{display:block;font:800 clamp(2.25rem,1.6rem + 2.6vw,3.25rem)/1 var(--font-head);letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.stat .l{display:block;margin-top:6px;font-size:.9375rem;line-height:1.35;color:var(--ink-2)}
+.stat .sub{display:block;margin-top:2px;font-size:.8125rem;color:var(--ink-3)}
+
+/* ---------- verdict board ---------- */
+.board{padding-block:28px 36px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px 16px}
+@media (min-width:720px){.panel{padding:22px 24px}}
+.board-head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px 24px;margin-bottom:6px}
+.board-head h2{margin:0;font:700 1.25rem/1.25 var(--font-head)}
+.board-head p{margin:4px 0 0;font-size:.875rem;color:var(--ink-3)}
+.hook{display:inline-flex;align-items:center;gap:6px;font-weight:700;font-size:.9375rem}
+.hook svg{width:14px;height:14px;flex:none}
+.legend{display:flex;flex-wrap:wrap;gap:8px 18px;margin:0;padding:0;list-style:none;font-size:.8125rem;color:var(--ink-2)}
+.legend li{display:inline-flex;align-items:center;gap:7px}
+.legend .sw{width:12px;height:12px;border-radius:3px;display:inline-block}
+.sw.ext{background:var(--ext)} .sw.short{background:var(--short)} .sw.none{background:var(--none);box-shadow:inset 0 0 0 1px var(--none-edge)}
+.legend .key{display:inline-grid;grid-template-columns:auto auto;column-gap:2px;align-items:center;text-align:center}
+.legend .key .tile{grid-column:1 / span 2;justify-self:center}
+.legend .key small{font:700 .625rem/1.2 var(--font-head);color:var(--ink-3)}
+.brow{display:grid;grid-template-columns:minmax(0,1fr);gap:8px 20px;padding-block:12px;border-top:1px solid var(--line)}
+.brow:first-of-type{margin-top:10px}
+@media (min-width:760px){.brow{grid-template-columns:230px minmax(0,1fr);align-items:start}}
+.blabel{appearance:none;background:none;border:0;padding:2px 0;text-align:left;cursor:pointer;display:grid;grid-template-columns:auto 1fr;column-gap:10px;align-items:baseline;border-radius:6px}
+.blabel .bn{font:700 1rem/1.3 var(--font-head)}
+.blabel .bc{font:800 1rem/1.3 var(--font-head);font-variant-numeric:tabular-nums;color:var(--ink-2);justify-self:start}
+.blabel .bd{grid-column:1 / span 2;font-size:.8125rem;line-height:1.35;color:var(--ink-3)}
+.blabel:hover .bn{text-decoration:underline;text-underline-offset:.18em}
+.btiles{display:flex;flex-wrap:wrap;gap:2px;min-width:0}
+.btile{appearance:none;border:0;background:none;padding:2px;border-radius:6px;cursor:pointer;line-height:0}
+.btile:hover{background:var(--surface-2)}
+.btile:hover .tile{transform:translateY(-1px)}
+.tip{position:fixed;z-index:60;pointer-events:none;max-width:260px;padding:8px 10px;border-radius:8px;background:var(--tip-bg);color:var(--tip-ink);font-size:.8125rem;line-height:1.35;box-shadow:var(--shadow)}
+.tip b{display:block;font:700 .875rem/1.3 var(--font-head)}
+
+/* ---------- controls ---------- */
+.controls{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;background:var(--bg);background:color-mix(in srgb,var(--bg) 94%,transparent);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border-block:1px solid var(--line)}
+.controls .wrap{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding-block:10px}
+.search{position:relative;flex:1 1 240px;min-width:0}
+.search input{width:100%;height:42px;padding:0 12px 0 38px;border:1px solid var(--line-2);border-radius:10px;background:var(--surface);color:var(--ink);font:inherit;font-size:1rem}
+.search input::placeholder{color:var(--ink-3)}
+.search svg{position:absolute;left:12px;top:50%;width:18px;height:18px;transform:translateY(-50%);color:var(--ink-3);pointer-events:none}
+.ftoggle{display:inline-flex;align-items:center;gap:8px;height:42px;padding:0 14px;border:1px solid var(--line-2);border-radius:10px;background:var(--surface);cursor:pointer;font-weight:700}
+.ftoggle svg{width:16px;height:16px}
+.ftoggle .fc{min-width:20px;height:20px;padding:0 6px;border-radius:999px;background:var(--accent);color:var(--on-accent);font:800 .75rem/20px var(--font-head);text-align:center}
+.filters,.chips{display:none;flex-wrap:wrap;gap:8px;align-items:center;width:100%}
+.controls.open .filters,.controls.open .chips{display:flex}
+@media (min-width:960px){
+  .ftoggle{display:none}
+  .chips{display:flex;width:auto;flex:0 0 auto}
+  .filters{display:flex}
+  .search{flex:1 1 320px}
+}
+.sel{position:relative;display:inline-flex;flex:1 1 calc(50% - 4px);min-width:0}
+@media (min-width:960px){.sel{flex:0 1 auto}}
+.sel select{appearance:none;-webkit-appearance:none;width:100%;height:38px;padding:0 32px 0 12px;border:1px solid var(--line-2);border-radius:10px;background:var(--surface);color:var(--ink);font:inherit;font-size:.9375rem;text-overflow:ellipsis;cursor:pointer}
+.sel select.on{border-color:var(--accent);background:var(--accent-soft);font-weight:700}
+.sel::after{content:"";position:absolute;right:13px;top:50%;width:7px;height:7px;border-right:2px solid var(--ink-3);border-bottom:2px solid var(--ink-3);transform:translateY(-70%) rotate(45deg);pointer-events:none}
+.chip{display:inline-flex;align-items:center;gap:7px;height:38px;padding:0 13px;border:1px solid var(--line-2);border-radius:999px;background:var(--surface);cursor:pointer;font-size:.9375rem;white-space:nowrap}
+.chip svg{width:14px;height:14px}
+.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--on-accent);font-weight:700}
+.chip.rv[aria-pressed="true"]{background:var(--draft-bg);border-color:var(--draft-line);color:var(--ink)}
+.resultbar{display:flex;flex-wrap:wrap;gap:6px 16px;align-items:baseline;justify-content:space-between;padding-block:16px 10px;font-size:.9375rem;color:var(--ink-2)}
+.linkbtn{appearance:none;background:none;border:0;padding:0;color:var(--link);text-decoration:underline;text-underline-offset:.18em;cursor:pointer;font:inherit}
+
+/* ---------- compound list ---------- */
+.listhead{display:none}
+@media (min-width:880px){
+  .listhead{display:grid;grid-template-columns:26px minmax(0,1.45fr) minmax(0,1fr) minmax(0,1.15fr) 20px;gap:20px;padding:0 16px 8px}
+}
+.rows{list-style:none;margin:0 0 56px;padding:0;background:var(--surface);border:1px solid var(--line);border-radius:14px}
+.row{scroll-margin-top:calc(var(--sticky-h) + 12px)}
+.row + .row{border-top:1px solid var(--line)}
+.row.flash{animation:flash 1.6s ease-out}
+@keyframes flash{0%,30%{box-shadow:inset 4px 0 0 var(--accent);background:var(--accent-soft)}100%{box-shadow:inset 4px 0 0 transparent;background:transparent}}
+.row details[open]{box-shadow:inset 3px 0 0 var(--accent)}
+.row summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:22px minmax(0,1fr) 20px;grid-template-areas:"tile name chev" ". mice mice" ". hum hum";gap:4px 12px;padding:14px 14px 14px 16px;align-items:start;border-radius:14px}
+.row summary::-webkit-details-marker{display:none}
+.row summary::marker{content:""}
+@media (min-width:880px){
+  .row summary{grid-template-columns:26px minmax(0,1.45fr) minmax(0,1fr) minmax(0,1.15fr) 20px;grid-template-areas:"tile name mice hum chev";gap:6px 20px;align-items:center;padding:14px 16px}
+}
+.s-tile{grid-area:tile;padding-top:2px}
+@media (min-width:880px){.s-tile{padding-top:0}}
+.s-name{grid-area:name;min-width:0}
+.s-mice{grid-area:mice;min-width:0;display:flex;flex-wrap:wrap;gap:2px 8px;align-items:baseline}
+.s-hum{grid-area:hum;min-width:0;display:flex;flex-wrap:wrap;gap:4px 8px;align-items:center}
+.s-chev{grid-area:chev;color:var(--ink-3);padding-top:3px}
+.s-chev svg{width:16px;height:16px;transition:transform .15s}
+.row details[open] .s-chev svg{transform:rotate(180deg)}
+.nm{font:700 1.0625rem/1.3 var(--font-head);color:var(--ink)}
+.row summary:hover .nm{text-decoration:underline;text-underline-offset:.18em;text-decoration-thickness:1px}
+.cat{display:block;margin-top:1px;font-size:.875rem;line-height:1.4;color:var(--ink-3)}
+.tag{display:inline-block;margin-left:6px;padding:2px 7px;border-radius:999px;border:1px solid var(--line-2);font:700 .6875rem/1.3 var(--font-head);letter-spacing:.04em;color:var(--ink-2);vertical-align:2px;white-space:nowrap}
+.tag.flag{border-style:dashed;border-color:var(--draft-line);background:var(--draft-bg);color:var(--draft-ink)}
+.s-lab{font:700 .6875rem/1.3 var(--font-head);letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);min-width:58px}
+@media (min-width:880px){.s-lab{display:none}}
+.vd{font:700 .9375rem/1.35 var(--font-ui)}
+.sxl{display:none;font-size:.8125rem;color:var(--ink-3);width:100%}
+@media (min-width:880px){.sxl{display:block}}
+
+/* result glyphs: shape + word carry the meaning, color supports it */
+.res{display:inline-flex;align-items:center;gap:6px;font-weight:700;white-space:nowrap}
+.ic{width:12px;height:12px;flex:none}
+.ic.ext,.ic.tlong{color:var(--ext)} .ic.short,.ic.tshort{color:var(--short)} .ic.none,.ic.nt{color:var(--ink-3)}
+
+/* LEV grade badge */
+.grade{display:inline-flex;align-items:center;gap:8px;padding:3px 10px 3px 8px;border:1px solid var(--grade-line);border-radius:999px;background:var(--grade-soft);color:var(--ink);font:700 .875rem/1.35 var(--font-ui);white-space:nowrap}
+.grade.lg{font-size:1rem;padding:5px 14px 5px 11px}
+.grade.g-not_graded{background:transparent;border-style:dashed;border-color:var(--line-2);color:var(--ink-3);font-weight:400}
+.dots{display:inline-flex;gap:3px;align-items:center}
+.dots i{width:7px;height:7px;border-radius:50%;border:1.5px solid var(--grade)}
+.dots i.on{background:var(--grade)}
+.g-not_graded .dots i{border-color:var(--ink-3);border-style:dotted}
+.dots svg{width:12px;height:12px;color:var(--grade)}
+.draft{display:inline-block;padding:3px 6px;border:1px dashed var(--draft-line);border-radius:4px;background:var(--draft-bg);color:var(--draft-ink);font:800 .6875rem/1.2 var(--font-head);letter-spacing:.1em;text-transform:uppercase;white-space:nowrap}
+
+/* ---------- expanded detail ---------- */
+.detail{display:grid;gap:14px;padding:2px 14px 20px 16px}
+@media (min-width:880px){.detail{padding:2px 20px 24px 62px}}
+.popline{display:flex;gap:8px;align-items:flex-start;margin:0;font-size:.9375rem;color:var(--ink-2)}
+.popline svg{flex:none;width:15px;height:15px;margin-top:4px;color:var(--ink-3)}
+.sec{border:1px solid var(--line);border-radius:12px;padding:16px;min-width:0}
+@media (min-width:720px){.sec{padding:18px 20px}}
+.sec.mice{background:var(--surface);border-left:4px solid var(--accent)}
+.sec.humans{background:var(--grade-soft);border-color:var(--grade-line);border-left:4px solid var(--grade)}
+.sec-head{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 12px;margin-bottom:12px}
+.sec-head h3{margin:0;font:700 1rem/1.3 var(--font-head)}
+.sec-head h3 span{font-weight:500;color:var(--ink-3)}
+.kind{padding:5px 9px;border-radius:999px;font:800 .625rem/1 var(--font-head);letter-spacing:.11em;text-transform:uppercase;white-space:nowrap}
+.kind.fact{background:var(--accent-soft);color:var(--accent-hover)}
+.kind.judg{background:var(--surface);border:1px solid var(--grade-line);color:var(--grade)}
+.meaning{margin:0 0 14px;font-size:1rem;font-weight:700;line-height:1.5;max-width:72ch}
+.facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 16px;margin:0 0 16px}
+.facts .f-v{grid-column:1 / -1}
+@media (min-width:720px){.facts{grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px 20px}.facts .f-v{grid-column:auto}}
+.facts div{min-width:0}
+.facts dt{font:700 .6875rem/1.3 var(--font-head);letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3)}
+.facts dd{margin:3px 0 0;font-size:.9375rem;line-height:1.4}
+.facts dd .tile{margin-right:6px;vertical-align:-4px}
+.tablewrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table.tests{width:100%;border-collapse:collapse;font-size:.875rem;line-height:1.35;font-variant-numeric:tabular-nums}
+.tests th,.tests td{padding:9px 10px 9px 0;text-align:left;vertical-align:top;border-top:1px solid var(--line)}
+.tests thead th{padding-top:0;border-top:0;font:700 .6875rem/1.3 var(--font-head);letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);white-space:nowrap}
+.tests tbody th{font-weight:400}
+.tests .co{display:block;font:700 .875rem/1.3 var(--font-head)}
+.tests .tl{display:block;color:var(--ink-2)}
+.tests .sch{display:block;font-size:.8125rem;color:var(--ink-3)}
+.tests .dn{display:block;font-size:.8125rem;color:var(--ink-3);max-width:22ch}
+.tests td.sx{min-width:150px}
+.sx .mx{display:flex;align-items:center;gap:8px;margin-top:5px}
+.sx .pct{font-weight:700;min-width:3.4em}
+.sx .pv{display:block;margin-top:2px;font-size:.8125rem;color:var(--ink-3)}
+.mbar{position:relative;display:inline-block;width:76px;height:8px;border-radius:2px;background:var(--bar-track);flex:none}
+.mbar::before{content:"";position:absolute;left:var(--z);top:-2px;bottom:-2px;width:1px;background:var(--ink-3)}
+.mbar i{position:absolute;top:0;bottom:0;border-radius:2px}
+.mbar i.ext{background:var(--ext)} .mbar i.short{background:var(--short)} .mbar i.tlong{background:var(--tlong)} .mbar i.tshort{background:var(--tshort)} .mbar i.none,.mbar i.nt{background:var(--bar-none)}
+.tests tr.xrow td{border-top:0;padding-top:0;font-size:.8125rem;color:var(--ink-2)}
+.xnote{display:block;margin-top:2px}
+.xnote b{font-weight:700;color:var(--ink)}
+.xnote.chk b{color:var(--draft-ink)}
+.tnote{margin:10px 0 0;font-size:.8125rem;color:var(--ink-3);max-width:80ch}
+.ph-meta,.sxg{display:none}
+@media (max-width:639px){
+  .tests thead{display:none}
+  .tests,.tests tbody{display:block}
+  .tests tr{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"t s" "m m" "f f";gap:6px 12px;padding-block:12px;border-top:1px solid var(--line)}
+  .tests tr.xrow{display:block;border-top:0;padding:0 0 12px}
+  .tests th,.tests td{display:block;border:0;padding:0}
+  .tests tbody th{grid-area:t}
+  .tests td.c-src{grid-area:s;text-align:right;font-size:.8125rem}
+  .tests td.c-dose,.tests td.c-age{display:none}
+  .tests td.c-m{grid-area:m} .tests td.c-f{grid-area:f}
+  .tests td.sx{min-width:0}
+  .ph-meta{display:block;font-size:.8125rem;color:var(--ink-2)}
+  .sx > div{display:grid;grid-template-columns:1.3em 8.4em minmax(0,1fr);align-items:center;column-gap:6px}
+  .sxg{display:block;font-weight:700;color:var(--ink-3)}
+  .sx .mx{margin-top:0}
+  .sx .pv{grid-column:2 / -1;margin-top:0}
+}
+.callout{margin-top:14px;padding:12px 14px;border-radius:10px;background:var(--surface-2);border:1px solid var(--line)}
+.callout h4{margin:0 0 4px;font:700 .9375rem/1.35 var(--font-head)}
+.callout p{margin:0;font-size:.9375rem;max-width:78ch}
+.callout p + p{margin-top:8px}
+.callout .re-note{font-size:.8125rem;color:var(--ink-3)}
+.readings table{width:100%;border-collapse:collapse;margin:8px 0 12px;font-size:.875rem}
+.readings th,.readings td{text-align:left;vertical-align:top;padding:8px 10px 8px 0;border-top:1px solid var(--line)}
+.readings thead th{border-top:0;padding-top:0;font:700 .6875rem/1.3 var(--font-head);letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
+.readings tbody th{font-weight:700}
+.readings tbody th span{display:block;font-weight:400;font-size:.8125rem;color:var(--ink-3)}
+.readings .pv{display:block;font-size:.8125rem;color:var(--ink-3)}
+.notes{margin:14px 0 0;padding-left:1.1em;font-size:.875rem;color:var(--ink-2)}
+.notes li + li{margin-top:4px}
+/* humans panel: the editorial voice is set in serif */
+.gbig{display:flex;flex-wrap:wrap;gap:8px 10px;align-items:center}
+.tierdef{margin:8px 0 14px;font-size:.8125rem;color:var(--ink-3);max-width:72ch}
+.claim{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px 20px;margin:0 0 14px;padding:12px 14px;border-radius:10px;background:var(--surface);border:1px solid var(--grade-line)}
+.claim dt{font:800 .6875rem/1.3 var(--font-head);letter-spacing:.09em;text-transform:uppercase;color:var(--grade)}
+.claim dd{margin:3px 0 0;font:600 1rem/1.4 var(--font-serif)}
+.stmt{margin:0 0 10px;font:600 1.0625rem/1.5 var(--font-serif);max-width:70ch}
+.summ{margin:0 0 10px;font:400 1rem/1.62 var(--font-serif);color:var(--ink-2);max-width:70ch}
+.est{margin:0 0 12px;font-size:.875rem;color:var(--ink-2);max-width:78ch}
+.ng{margin:10px 0 0;font:400 1rem/1.55 var(--font-serif);color:var(--ink-2);max-width:70ch}
+.hsrc h4,.refs h4{margin:14px 0 6px;font:700 .6875rem/1.3 var(--font-head);letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3)}
+.reflist{margin:0;padding-left:1.25em;display:grid;gap:7px;font-size:.875rem;line-height:1.45}
+.reflist li{overflow-wrap:anywhere}
+.reflist .r-a{font-weight:700}
+.reflist .r-k{display:inline-block;margin-left:4px;font-size:.75rem;color:var(--ink-3)}
+.revd{margin:12px 0 0;font-size:.8125rem;color:var(--ink-3)}
+.revonly{border:1px dashed var(--draft-line);background:var(--draft-bg);border-radius:10px;padding:10px 12px;font-size:.875rem;color:var(--ink)}
+.revonly .rl{display:block;margin-bottom:4px;font:800 .6875rem/1.3 var(--font-head);letter-spacing:.1em;text-transform:uppercase;color:var(--draft-ink)}
+.revonly ul{margin:0;padding-left:1.1em}
+.sec .revonly{margin-top:12px}
+.dfoot{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;justify-content:space-between}
+.verif{display:flex;gap:8px;align-items:flex-start;font-size:.875rem;color:var(--ink-2);max-width:72ch}
+.verif svg{flex:none;width:16px;height:16px;margin-top:2px}
+.verif.ok svg{color:var(--ext)} .verif.nr svg{color:var(--draft-ink)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:40px;padding:0 15px;border:1px solid var(--line-2);border-radius:10px;background:var(--surface);color:var(--ink);font:700 .9375rem/1.2 var(--font-ui);text-decoration:none;cursor:pointer}
+.btn:hover{border-color:var(--ink-3);text-decoration:none}
+.btn svg{width:16px;height:16px}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.btn.primary:hover{background:var(--accent-hover);border-color:var(--accent-hover)}
+.btn[aria-disabled="true"]{cursor:default;opacity:.85}
+.btn .fmt{font:800 .6875rem/1 var(--font-head);letter-spacing:.08em;color:var(--ink-3)}
+.copyfall{display:flex;gap:8px;width:100%}
+.copyfall input{flex:1;min-width:0;height:38px;padding:0 10px;border:1px solid var(--line-2);border-radius:8px;background:var(--surface);color:var(--ink);font:inherit;font-size:.875rem}
+.empty{padding:28px 16px;text-align:center;color:var(--ink-2)}
+.loading{padding:28px 16px;color:var(--ink-3)}
+
+/* ---------- how to read / notify / data ---------- */
+.section{padding-block:24px 48px}
+.section > h2,.sec-title{margin:0 0 6px;font:800 1.625rem/1.2 var(--font-head);letter-spacing:-.012em}
+.section-intro{margin:0 0 4px;max-width:66ch;color:var(--ink-2)}
+.how-grid{margin-top:20px}
+@media (min-width:880px){.how-grid{columns:2;column-gap:56px}}
+.how-item{padding-block:18px;border-top:1px solid var(--line);min-width:0;break-inside:avoid}
+.how-item h3{margin:0 0 8px;font:700 1.125rem/1.3 var(--font-head)}
+.how-item p,.how-item li{max-width:64ch}
+.how-item p{margin:0 0 10px}
+.how-item ul,.how-item ol{margin:0 0 10px;padding-left:1.15em}
+.how-item li + li{margin-top:6px}
+.deflist{display:grid;gap:8px;margin:0 0 10px}
+.deflist div{display:grid;grid-template-columns:minmax(0,9.5em) minmax(0,1fr);gap:12px;align-items:baseline}
+.deflist dt{font-weight:700}
+.deflist dd{margin:0;color:var(--ink-2)}
+.tiers{list-style:none;padding:0!important;display:grid;gap:10px}
+.tiers li{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px;align-items:start}
+.tiers p{margin:0;font-size:.9375rem;color:var(--ink-2)}
+.cite{font-size:.8125rem;white-space:nowrap}
+.how-sources{margin-top:8px;font-size:.875rem;color:var(--ink-3)}
+.changelog{list-style:none;padding:0!important;font-size:.9375rem}
+.changelog time{font-weight:700;margin-right:6px}
+.addr{display:inline-flex;flex-wrap:wrap;align-items:center;gap:8px}
+.addr code{padding:4px 8px;border-radius:6px;background:var(--surface-2);border:1px solid var(--line);user-select:all}
+.ph{display:inline-block;padding:2px 6px;border:1px dashed var(--draft-line);background:var(--draft-bg);border-radius:4px;color:var(--draft-ink);font-weight:700}
+.notify-box{display:grid;gap:14px;padding:22px 20px;border-radius:14px;background:var(--accent-soft);border:1px solid var(--line)}
+@media (min-width:760px){.notify-box{grid-template-columns:minmax(0,1fr) auto;align-items:center;padding:28px}}
+.notify-box h2{margin:0 0 6px;font:800 1.375rem/1.25 var(--font-head)}
+.notify-box p{margin:0;max-width:60ch;color:var(--ink-2)}
+.dl-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+.dl-note{margin:10px 0 0;font-size:.875rem;color:var(--ink-3)}
+
+/* ---------- footer ---------- */
+.foot{border-top:1px solid var(--line);background:var(--surface);font-size:.875rem;color:var(--ink-2)}
+.foot .wrap{display:grid;gap:14px;padding-block:28px 44px}
+.foot p{margin:0;max-width:80ch}
+.foot .wordmark{font-size:1rem}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:70;max-width:calc(100% - 32px);padding:10px 16px;border-radius:10px;background:var(--tip-bg);color:var(--tip-ink);font-size:.9375rem;box-shadow:var(--shadow)}
+@media (prefers-reduced-motion:reduce){
+  .row.flash{animation:none}
+  .s-chev svg,.btile .tile{transition:none}
+}
+</style>
+
+<a class="skip" href="#compounds">Skip to the compound list</a>
+<div class="review" id="reviewBanner" hidden><div class="wrap" id="reviewText"></div></div>
+
+<header class="masthead">
+  <div class="wrap">
+    <a class="wordmark" href="#top" aria-label="The LEV Scoreboard, LEV Institute">
+      <span class="tile brand" aria-hidden="true"><i></i><i></i></span>
+      <span>The LEV Scoreboard <span class="inst">· LEV Institute</span></span>
+    </a>
+    <nav class="topnav" aria-label="Page">
+      <a href="#compounds">Compounds</a>
+      <a href="#how-to-read">How to read</a>
+      <a href="#get-notified" id="navNotify">Get notified</a>
+      <a href="#download">Data</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <!-- ===== Hero: what the ITP is, why it matters, the punchline ===== -->
+  <section class="hero wrap" aria-labelledby="headline">
+   <div class="hero-grid">
+    <p class="eyebrow">Mouse lifespan results · NIA Interventions Testing Program</p>
+    <h1 id="headline">The U.S. government’s Interventions Testing Program gives candidate anti-aging compounds a rigorous, independent test in mice, <em>and most of them fail.</em></h1>
+    <p class="lede" id="lede">Run by the National Institute on Aging, it tests every compound the same way at three independent labs, in genetically diverse mice, and publishes the failures alongside the successes. Here is every published result: what happened in each sex, and where the human evidence stands.</p>
+    <p class="disclaim"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 7v4.2M8 4.6v.1" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg><span><strong>Not medical advice.</strong> This page reports mouse experiments and LEV’s reading of the human evidence. It doesn’t recommend any compound, and mouse doses are never converted into human doses.</span></p>
+    <ul class="stats" id="stats" aria-label="Counts"></ul>
+   </div>
+  </section>
+
+  <!-- ===== The board: one square per compound ===== -->
+  <section class="board wrap" aria-labelledby="board-h">
+    <div class="panel">
+      <div class="board-head">
+        <div>
+          <h2 id="board-h">Every compound, one square each</h2>
+          <p>Select a square or a group to see the details.</p>
+          <p><button class="linkbtn hook" id="famousHook" type="button"></button></p>
+        </div>
+        <ul class="legend" aria-label="How to read the squares">
+          <li><span class="key" aria-hidden="true"><span class="tile"><i class="none"></i><i class="none"></i></span><small>♂</small><small>♀</small></span><span>Left half: males<br>Right half: females</span></li>
+          <li><span class="sw ext" aria-hidden="true"></span>Lived longer</li>
+          <li><span class="sw short" aria-hidden="true"></span>Lived shorter</li>
+          <li><span class="sw none" aria-hidden="true"></span>No significant change</li>
+        </ul>
+      </div>
+      <div id="board"></div>
+    </div>
+  </section>
+
+  <!-- ===== Search, filters and the list ===== -->
+  <section id="compounds" aria-labelledby="compounds-h">
+    <h2 class="sr" id="compounds-h">All compounds</h2>
+    <div class="controls" id="controls">
+      <div class="wrap">
+        <label class="search">
+          <span class="sr">Search compounds</span>
+          <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="6" fill="none" stroke="currentColor" stroke-width="2"/><path d="M13 13l5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          <input id="q" type="search" autocomplete="off" spellcheck="false" placeholder="Search, e.g. rapamycin, metformin, NAD">
+        </label>
+        <button class="ftoggle" id="ftoggle" type="button" aria-expanded="false" aria-controls="chips filters">
+          <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 4h12M4 8h8M6 12h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          Filters <span class="fc" id="fcount" hidden>0</span>
+        </button>
+        <div class="chips" id="chips">
+          <button class="chip" id="fFamous" type="button" aria-pressed="false" title="Popular compounds that did not extend lifespan in either sex">
+            <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.6l1.9 4 4.4.5-3.3 3 .9 4.3L8 11.2l-3.9 2.2.9-4.3-3.3-3 4.4-.5z" fill="currentColor"/></svg>
+            <span id="fFamousLabel">Famous but failed</span>
+          </button>
+          <button class="chip rv" id="fReview" type="button" aria-pressed="false" hidden>
+            <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 14V2.5M3 2.5h8.5l-1.8 3 1.8 3H3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+            <span id="fReviewLabel">Needs review</span>
+          </button>
+        </div>
+        <div class="filters" id="filters">
+          <span class="sel"><select id="fVerdict" aria-label="Mouse result"></select></span>
+          <span class="sel"><select id="fSex" aria-label="Sex"></select></span>
+          <span class="sel"><select id="fGrade" aria-label="Human evidence grade"></select></span>
+          <span class="sel"><select id="fSort" aria-label="Sort"></select></span>
+        </div>
+      </div>
+    </div>
+    <div class="wrap">
+      <div class="resultbar"><span id="count" aria-live="polite"></span><button class="linkbtn" id="clear" type="button" hidden>Clear filters</button></div>
+      <div class="listhead" aria-hidden="true"><span></span><span class="label">Compound</span><span class="label">In mice · ITP result</span><span class="label">In humans · LEV grade</span><span></span></div>
+      <ol class="rows" id="rows"><li class="loading">Loading the data…</li></ol>
+      <noscript><p class="empty">This page needs JavaScript to draw the scoreboard. The raw data is in <a href="data/scoreboard.json">data/scoreboard.json</a>.</p></noscript>
+    </div>
+  </section>
+
+  <!-- ===== How to read this ===== -->
+  <section class="section wrap" id="how-to-read" aria-labelledby="how-h">
+    <h2 id="how-h">How to read this</h2>
+    <p class="section-intro">The mouse result is a published fact. The human-evidence grade is LEV’s judgment. We keep them apart on purpose.</p>
+    <div class="how-grid">
+      <div class="how-item">
+        <h3>What the ITP is</h3>
+        <p>The Interventions Testing Program is run by the U.S. National Institute on Aging. Researchers propose compounds; after expert review, the program tests the chosen ones in parallel at three independent labs (The Jackson Laboratory, the University of Michigan and the University of Texas Health Science Center at San Antonio) under the same protocol. <a class="cite" data-src="nadon2008"></a></p>
+        <p>The mice are UM-HET3: each one is a genetically unique cross of four inbred strains, so a result can’t hinge on one strain’s quirks. The compound is mixed into the food; doses are given in ppm (parts per million in the chow). The original design called for about 132 males and 108 females per compound across the three labs, enough to detect a 10% change in lifespan. <a class="cite" data-src="nadon2008"></a></p>
+        <p>Early tests started treatment at 4 months of age; many later tests start in middle or late life. In this dataset, start ages run from <span data-k="ageMin"></span> to <span data-k="ageMax"></span> months.</p>
+      </div>
+      <div class="how-item">
+        <h3>How we read a result</h3>
+        <dl class="deflist">
+          <div><dt>Primary test</dt><dd>The ITP’s own pre-specified analysis: a log-rank test comparing treated and control mice of the same sex, stratified by lab, with the three labs pooled. <a class="cite" data-src="nadon2008"></a></dd></div>
+          <div><dt>Extended / shortened</dt><dd>Significantly longer or shorter life (p &lt; 0.05) in that test.</dd></div>
+          <div><dt>Trend</dt><dd>0.05 ≤ p &lt; 0.10. Shown for completeness, never counted as a result.</dd></div>
+          <div><dt>Median change</dt><dd>Percent change in median lifespan versus same-sex controls, as reported in the paper. A dash means it wasn’t reported or we haven’t captured it. The small bars use one scale for every compound.</dd></div>
+          <div><dt>Reanalyses</dt><dd>Later statistical reanalyses, such as a 2024 reanalysis with the Gehan test and a 2026 reanalysis accounting for mice that share cages, are shown next to the result. They never change the verdict.</dd></div>
+        </dl>
+        <p><strong>Verdicts</strong> combine every test of a compound:</p>
+        <dl class="deflist" id="verdictDefs"></dl>
+        <p class="muted" id="replicationDefs"></p>
+      </div>
+      <div class="how-item">
+        <h3>Why mouse results don’t carry over to people</h3>
+        <ul>
+          <li><strong>Mice aren’t small people.</strong> They live a few years, eat one controlled diet in a clean lab and die of different diseases than we do.</li>
+          <li><strong>A dose in chow isn’t a pill.</strong> How much reaches the blood depends on the species, the food and the compound. We never convert mouse doses into human doses.</li>
+          <li><strong>Lifespan is one number.</strong> These studies aren’t built to find the side effects that matter to people, or to show whether the extra time is healthy time.</li>
+          <li><strong>Sex differences are real but unexplained.</strong> Several compounds helped only male mice. That doesn’t tell us how men and women would respond.</li>
+          <li><strong>A failure isn’t final, and a success isn’t a prescription.</strong> Another dose, start age or formulation might behave differently. A success here means “worth testing in people,” not “worth taking.”</li>
+        </ul>
+      </div>
+      <div class="how-item">
+        <h3>Human-evidence grades</h3>
+        <p>Each grade names the claim we graded and the people it applies to, because a compound can be proven for one use and unproven for another. A drug approved for diabetes, for example, can still be “Speculative” for slowing aging.</p>
+        <ul class="tiers" id="tierDefs"></ul>
+        <p>Grades carry a <span class="draft">Draft</span> badge until LEV’s editor approves them. Only approved grades appear on the public site.</p>
+      </div>
+      <div class="how-item">
+        <h3>Independence</h3>
+        <p>LEV Institute sells nothing on this page: no products, no affiliate links, no sponsorships. Nobody can pay to be listed, graded or left out. We name compounds, never brands.</p>
+      </div>
+      <div class="how-item">
+        <h3>Corrections</h3>
+        <p>Found an error? Send the compound, what’s wrong and your source to <span id="corrections"></span>. We check every report against the primary paper (the paper wins over any summary, including ours) and log each correction below with its date.</p>
+      </div>
+      <div class="how-item">
+        <h3>Updates</h3>
+        <p id="updated"></p>
+        <ul class="changelog" id="changelog"></ul>
+      </div>
+      <div class="how-item">
+        <h3>Sources for this section</h3>
+        <ol class="reflist" id="howSources"></ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Get notified ===== -->
+  <section class="section wrap" id="get-notified" aria-labelledby="notify-h">
+    <div class="notify-box">
+      <div>
+        <h2 id="notify-h">Get notified when a grade changes</h2>
+        <p>We’ll email you when LEV changes a human-evidence grade or adds new ITP results.</p>
+        <p class="dl-note" id="notifyNote" hidden></p>
+      </div>
+      <div id="notifyAction"></div>
+    </div>
+  </section>
+
+  <!-- ===== Data downloads ===== -->
+  <section class="section wrap" id="download" aria-labelledby="data-h">
+    <h2 id="data-h">Download the data</h2>
+    <p class="section-intro">Every test row, with its source. The JSON holds the full record (sources, definitions, reanalyses); the CSVs open in any spreadsheet.</p>
+    <div class="dl-row" id="downloads"></div>
+    <p class="dl-note" id="dlNote" hidden></p>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="wordmark"><span class="tile brand" aria-hidden="true"><i></i><i></i></span><span>The LEV Scoreboard <span class="inst">· LEV Institute</span></span></span>
+    <p><strong>Not medical advice.</strong> The LEV Scoreboard summarizes published research in mice and LEV’s editorial reading of the human evidence. It is not a recommendation to take, stop or avoid any drug or supplement, and it gives no doses for people: mouse doses do not translate into human doses. Talk to a qualified clinician about your own health.</p>
+    <p>LEV Institute is not affiliated with the National Institute on Aging or its Interventions Testing Program.</p>
+    <p class="muted" id="footMeta"></p>
+  </div>
+</footer>
+
+<div class="tip" id="tip" role="tooltip" hidden></div>
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+<script>
+(() => {
+'use strict';
+
+/* ------------------------------------------------------------------
+   Data lives in data/scoreboard.json. This script only draws it.
+   ------------------------------------------------------------------ */
+const DATA_URL = 'data/scoreboard.json';
+const $ = (s, el = document) => el.querySelector(s);
+const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+const VERDICT_ORDER = ['both','males','females','mixed','none','shortened'];
+const V_SHORT = {both:'Both sexes', males:'Males only', females:'Females only', mixed:'Mixed', none:'No effect', shortened:'Shortened'};
+const TIER_ORDER = ['strong','plausible_weak','speculative','not_supported','not_graded'];
+const TIER_DOTS = {strong:3, plausible_weak:2, speculative:1, not_supported:-1, not_graded:0};
+const R_WORD = {extended:'Extended', no_effect:'No effect', trend_longer:'Trend longer', trend_shorter:'Trend shorter', shortened:'Shortened', not_tested:'Not tested', unknown:'Unknown'};
+const R_CLASS = {extended:'ext', shortened:'short', trend_longer:'tlong', trend_shorter:'tshort', no_effect:'none', not_tested:'nt', unknown:'nt'};
+const SEX_WORD = {extended:'Extended', shortened:'Shortened', none:'No effect'};
+const BAR_MIN = -15, BAR_MAX = 40;   // one scale for every compound (% change in median lifespan)
+
+let D = null, SRC = {}, C = [], BY = {}, REVIEW = false, TIERS = {}, DEFAULT_TEST = '';
+const state = {q:'', verdict:'all', sex:'any', grade:'any', sort:'verdict', famous:false, review:false};
+
+/* ---------- small formatters ---------- */
+function fmtDate(iso) {
+  if (!iso) return '';
+  const [y, m, d] = String(iso).split('-').map(Number);
+  return (m && d) ? `${MONTHS[m - 1]} ${d}, ${y}` : String(iso);
+}
+function fmtPct(v) {
+  if (v === null || v === undefined || v === '') return '';
+  const n = Math.round(Number(v) * 10) / 10;
+  if (!isFinite(n)) return '';
+  const a = Math.abs(n), s = Number.isInteger(a) ? a.toFixed(0) : a.toFixed(1);
+  return (n > 0 ? '+' : n < 0 ? '−' : '') + s + '%';
+}
+function fmtP(p) {
+  if (p === null || p === undefined || p === '') return '';
+  p = String(p).trim();
+  return /^[<>]/.test(p) ? `p ${p[0]} ${p.slice(1)}` : `p = ${p}`;
+}
+function plural(n, one, many) { return `${n} ${n === 1 ? one : (many || one + 's')}`; }
+function fmtDose(d) {
+  // 10000 -> 10,000 ; leaves "4.7 + 9 + 0.47" alone
+  return String(d == null ? '' : d).replace(/\b\d{4,}\b/g, m => Number(m).toLocaleString('en-US'));
+}
+function norm(s) {
+  return String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '')
+    .replace(/[^a-z0-9+]+/g, ' ').trim();
+}
+function searchKey(c) {
+  const raw = [c.name, ...(c.aliases || []), c.category, c.mechanism].join(' | ');
+  const variants = [
+    raw.replace(/α/g, 'alpha').replace(/β/g, 'beta').replace(/γ/g, 'gamma'),
+    raw.replace(/α/g, 'a').replace(/β/g, 'b').replace(/γ/g, 'g'),
+  ].map(norm);
+  return ' ' + variants.join(' ') + ' ' + variants.map(v => v.replace(/ /g, '')).join(' ') + ' ';
+}
+
+/* ---------- icons ---------- */
+const ICON = {
+  ext:   '<svg class="ic ext" viewBox="0 0 12 12" aria-hidden="true"><path d="M6 1.4 11.2 10.4H.8z" fill="currentColor"/></svg>',
+  short: '<svg class="ic short" viewBox="0 0 12 12" aria-hidden="true"><path d="M6 10.6.8 1.6h10.4z" fill="currentColor"/></svg>',
+  tlong: '<svg class="ic tlong" viewBox="0 0 12 12" aria-hidden="true"><path d="M6 2.2 10.4 9.8H1.6z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>',
+  tshort:'<svg class="ic tshort" viewBox="0 0 12 12" aria-hidden="true"><path d="M6 9.8 1.6 2.2h8.8z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>',
+  none:  '<svg class="ic none" viewBox="0 0 12 12" aria-hidden="true"><rect x="1.5" y="5.2" width="9" height="1.6" rx=".8" fill="currentColor"/></svg>',
+  nt:    '<svg class="ic nt" viewBox="0 0 12 12" aria-hidden="true"><circle cx="6" cy="6" r="1.6" fill="currentColor"/></svg>',
+};
+const SVG_CHEV = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 6l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+const SVG_LINK = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6.6 9.4a3 3 0 0 0 4.2 0l2.3-2.3a3 3 0 0 0-4.2-4.2l-.9.9M9.4 6.6a3 3 0 0 0-4.2 0L2.9 8.9a3 3 0 0 0 4.2 4.2l.9-.9" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>';
+const SVG_STAR = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.6l1.9 4 4.4.5-3.3 3 .9 4.3L8 11.2l-3.9 2.2.9-4.3-3.3-3 4.4-.5z" fill="currentColor"/></svg>';
+const SVG_OK = '<svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M4.8 8.2l2.1 2.1 4.3-4.4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+const SVG_FLAG = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 14V2.5M3 2.5h8.5l-1.8 3 1.8 3H3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>';
+const SVG_DL = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2v8M4.5 6.8 8 10.3l3.5-3.5M2.5 13.5h11" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+const SVG_X = '<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3 3l6 6M9 3 3 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>';
+
+/* ---------- derived fields ---------- */
+function sexSummary(c, sex) {
+  const tested = c.cohorts.filter(x => x[sex] && x[sex].result !== 'not_tested');
+  const count = r => tested.filter(x => x[sex].result === r).length;
+  const ext = count('extended'), sh = count('shortened');
+  return {state: ext ? 'extended' : sh ? 'shortened' : 'none', ext, sh,
+          tl: count('trend_longer'), ts: count('trend_shorter'), n: tested.length};
+}
+function effectiveGrade(c) {
+  const he = c.human_evidence || {};
+  const graded = he.tier && he.tier !== 'not_graded';
+  if (graded && (REVIEW || he.status === 'approved')) return Object.assign({}, he, {draft: he.status !== 'approved'});
+  return {tier: 'not_graded', draft: false, established_use: he.established_use || null};
+}
+function prep(c) {
+  const yrs = c.cohorts.map(x => parseInt(String(x.cohort).replace(/\D/g, ''), 10)).filter(n => isFinite(n));
+  c.firstYear = yrs.length ? Math.min(...yrs) : null;
+  c.lastYear = yrs.length ? Math.max(...yrs) : null;
+  c.sx = {male: sexSummary(c, 'male'), female: sexSummary(c, 'female')};
+  c.g = effectiveGrade(c);
+  c.famousFailed = !!(c.popular && c.popular.flag && (c.verdict === 'none' || c.verdict === 'shortened'));
+  c.needsReview = !!(c.verification && c.verification.status === 'needs_review');
+  c.key = searchKey(c);
+}
+
+/* ---------- pieces ---------- */
+function tileHTML(c, cls) {
+  const h = s => s === 'extended' ? 'ext' : s === 'shortened' ? 'short' : 'none';
+  return `<span class="tile${cls ? ' ' + cls : ''}" aria-hidden="true"><i class="${h(c.sx.male.state)}"></i><i class="${h(c.sx.female.state)}"></i></span>`;
+}
+function sexLine(c) {
+  return `♂ ${SEX_WORD[c.sx.male.state]} · ♀ ${SEX_WORD[c.sx.female.state]}`;
+}
+function sexSR(c) {
+  return `Males: ${SEX_WORD[c.sx.male.state].toLowerCase()}. Females: ${SEX_WORD[c.sx.female.state].toLowerCase()}.`;
+}
+function dotsHTML(tier) {
+  if (tier === 'not_supported') return `<span class="dots" aria-hidden="true">${SVG_X}</span>`;
+  const n = TIER_DOTS[tier] || 0;
+  return `<span class="dots" aria-hidden="true">${[0, 1, 2].map(i => `<i class="${i < n ? 'on' : ''}"></i>`).join('')}</span>`;
+}
+function gradeHTML(g, big) {
+  const t = TIERS[g.tier] || {label: g.tier};
+  return `<span class="grade g-${esc(g.tier)}${big ? ' lg' : ''}">${dotsHTML(g.tier)}<span>${esc(t.label)}</span></span>` +
+    (g.draft ? `<span class="draft" title="Awaiting editor approval">Draft</span>` : '');
+}
+function srcURL(s) {
+  if (!s) return '';
+  if (s.doi) return 'https://doi.org/' + s.doi;
+  if (s.pmid) return `https://pubmed.ncbi.nlm.nih.gov/${s.pmid}/`;
+  return s.url || '';
+}
+function srcLink(key, text) {
+  const s = SRC[key];
+  if (!s) return esc(text || key);
+  const url = srcURL(s);
+  const label = esc(text || s.short || key);
+  return url ? `<a href="${esc(url)}" target="_blank" rel="noopener">${label}</a>` : label;
+}
+function refHTML(key) {
+  const s = SRC[key];
+  if (!s) return '';
+  const ids = [];
+  if (s.pmid) ids.push(`<a href="https://pubmed.ncbi.nlm.nih.gov/${esc(s.pmid)}/" target="_blank" rel="noopener">PMID ${esc(s.pmid)}</a>`);
+  if (s.doi) ids.push(`<a href="https://doi.org/${esc(s.doi)}" target="_blank" rel="noopener">doi:${esc(s.doi)}</a>`);
+  if (!s.pmid && !s.doi && s.url) ids.push(`<a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.url.replace(/^https?:\/\//, ''))}</a>`);
+  return `<li><span class="r-a">${esc(s.short)}.</span> ${esc(s.title)}. <i>${esc(s.citation || [s.journal, s.year].filter(Boolean).join(' '))}</i>. ${ids.join(' · ')}</li>`;
+}
+function barHTML(v, cls) {
+  if (v === null || v === undefined || v === '') return '<span class="mbar" aria-hidden="true" style="--z:27.27%"></span>';
+  const span = BAR_MAX - BAR_MIN, z = (-BAR_MIN) / span * 100;
+  const vv = Math.max(BAR_MIN, Math.min(BAR_MAX, Number(v)));
+  const w = Math.max(Math.abs(vv) / span * 100, 1.2);
+  const left = vv >= 0 ? z : z - w;
+  return `<span class="mbar" aria-hidden="true" style="--z:${z.toFixed(2)}%"><i class="${cls}" style="left:${left.toFixed(2)}%;width:${w.toFixed(2)}%"></i></span>`;
+}
+
+/* ---------- hero, board ---------- */
+function counts() {
+  const n = C.length;
+  const either = C.filter(c => c.extended_males || c.extended_females).length;
+  const both = C.filter(c => c.extended_males && c.extended_females).length;
+  const none = C.filter(c => c.verdict === 'none').length;
+  const shortened = C.filter(c => c.verdict === 'shortened').length;
+  return {n, either, both, none, shortened, noBenefit: n - either};
+}
+function renderHero() {
+  const k = counts();
+  const firstYear = Math.min(...C.map(c => c.firstYear).filter(Boolean));
+  $('#stats').innerHTML = `
+    <li class="stat"><span class="n">${k.n}</span><span class="l">compounds and combinations tested since ${firstYear}</span></li>
+    <li class="stat pos"><span class="n">${k.either}</span><span class="l">made mice live longer, in at least one sex</span></li>
+    <li class="stat pos"><span class="n">${k.both}</span><span class="l">did it in both sexes</span></li>
+    <li class="stat neg"><span class="n">${k.noBenefit}</span><span class="l">gave no lifespan benefit</span><span class="sub">${k.none} no effect · ${k.shortened} shortened life</span></li>`;
+  const through = D.meta.literature_through;
+  if (through) {
+    const [y, m] = through.split('-').map(Number);
+    $('#lede').textContent = `Run by the National Institute on Aging, it tests every compound the same way at three independent labs, in genetically diverse mice, and publishes the failures alongside the successes. Here is every result published through ${MONTHS[m - 1]} ${y}: what happened in each sex, and where the human evidence stands.`;
+  }
+}
+function renderBoard() {
+  const vdesc = (D.definitions && D.definitions.verdict_descriptions) || {};
+  const html = VERDICT_ORDER.map(v => {
+    const list = C.filter(c => c.verdict === v).sort((a, b) => a.name.localeCompare(b.name));
+    if (!list.length) return '';
+    return `<div class="brow">
+      <button class="blabel" type="button" data-verdict="${v}"><span class="bn">${esc(V_SHORT[v])}</span><span class="bc">${list.length}</span><span class="bd">${esc(vdesc[v] || '')}</span></button>
+      <div class="btiles">${list.map(c => `<button class="btile" type="button" data-id="${esc(c.id)}" aria-label="${esc(c.name)}: ${esc(V_SHORT[v])}. ${esc(sexSR(c))} Show details.">${tileHTML(c)}</button>`).join('')}</div>
+    </div>`;
+  }).join('');
+  $('#board').innerHTML = html;
+}
+
+/* ---------- tooltip for board squares ---------- */
+const tip = $('#tip');
+function showTip(btn) {
+  const c = BY[btn.dataset.id];
+  if (!c) return;
+  tip.innerHTML = `<b>${esc(c.name)}</b>${esc(V_SHORT[c.verdict])} · ${esc(sexLine(c))}`;
+  tip.hidden = false;
+  const r = btn.getBoundingClientRect(), tw = tip.offsetWidth, th = tip.offsetHeight;
+  let left = r.left + r.width / 2 - tw / 2;
+  left = Math.max(8, Math.min(left, window.innerWidth - tw - 8));
+  let top = r.top - th - 8;
+  if (top < 8) top = r.bottom + 8;
+  tip.style.left = left + 'px';
+  tip.style.top = top + 'px';
+}
+function hideTip() { tip.hidden = true; }
+
+/* ---------- controls ---------- */
+function opt(value, label) { return `<option value="${esc(value)}">${esc(label)}</option>`; }
+function renderControls() {
+  const k = counts();
+  const vc = v => C.filter(c => c.verdict === v).length;
+  $('#fVerdict').innerHTML = [
+    opt('all', 'All mouse results'),
+    opt('any_ext', `Lived longer, either sex (${k.either})`),
+    ...['both', 'males', 'females', 'mixed'].map(v => opt(v, `${V_SHORT[v]} (${vc(v)})`)),
+    opt('no_benefit', `No lifespan benefit (${k.noBenefit})`),
+    ...['none', 'shortened'].map(v => opt(v, `${V_SHORT[v]} (${vc(v)})`)),
+  ].join('');
+  $('#fSex').innerHTML = [
+    opt('any', 'Either sex'),
+    opt('male', `Longer life in males (${C.filter(c => c.extended_males).length})`),
+    opt('female', `Longer life in females (${C.filter(c => c.extended_females).length})`),
+  ].join('');
+  $('#fGrade').innerHTML = [opt('any', 'All human grades'),
+    ...TIER_ORDER.map(t => opt(t, `${TIERS[t].label} (${C.filter(c => c.g.tier === t).length})`))].join('');
+  $('#fSort').innerHTML = [opt('verdict', 'Sort by result'), opt('name', 'Sort A–Z'),
+    opt('recent', 'Newest test first'), opt('first', 'Oldest test first')].join('');
+  const nFamous = C.filter(c => c.famousFailed).length;
+  $('#fFamousLabel').textContent = `Famous but failed (${nFamous})`;
+  $('#famousHook').innerHTML = `${SVG_STAR}<span>Famous but failed: see the ${nFamous} popular compounds that didn’t extend lifespan</span>`;
+  if (REVIEW) {
+    $('#fReview').hidden = false;
+    $('#fReviewLabel').textContent = `Needs review (${C.filter(c => c.needsReview).length})`;
+  }
+}
+function syncControls() {
+  const set = (id, v, base) => { const el = $(id); el.value = v; el.classList.toggle('on', v !== base); };
+  set('#fVerdict', state.verdict, 'all');
+  set('#fSex', state.sex, 'any');
+  set('#fGrade', state.grade, 'any');
+  set('#fSort', state.sort, 'verdict');
+  $('#fFamous').setAttribute('aria-pressed', String(state.famous));
+  $('#fReview').setAttribute('aria-pressed', String(state.review));
+  if ($('#q').value !== state.q) $('#q').value = state.q;
+  const active = activeFilters();
+  const fc = $('#fcount');
+  fc.hidden = active === 0;
+  fc.textContent = String(active);
+}
+function activeFilters() {
+  return (state.q ? 1 : 0) + (state.verdict !== 'all') + (state.sex !== 'any') + (state.grade !== 'any') + (state.famous ? 1 : 0) + (state.review ? 1 : 0);
+}
+function resetFilters() {
+  Object.assign(state, {q: '', verdict: 'all', sex: 'any', grade: 'any', famous: false, review: false});
+  syncControls();
+  applyFilters();
+}
+function matches(c) {
+  if (state.q) {
+    const toks = norm(state.q).split(' ').filter(Boolean);
+    if (!toks.every(t => c.key.includes(t))) return false;
+  }
+  if (state.verdict === 'any_ext') { if (!(c.extended_males || c.extended_females)) return false; }
+  else if (state.verdict === 'no_benefit') { if (c.extended_males || c.extended_females) return false; }
+  else if (state.verdict !== 'all' && c.verdict !== state.verdict) return false;
+  if (state.sex === 'male' && !c.extended_males) return false;
+  if (state.sex === 'female' && !c.extended_females) return false;
+  if (state.grade !== 'any' && c.g.tier !== state.grade) return false;
+  if (state.famous && !c.famousFailed) return false;
+  if (state.review && !c.needsReview) return false;
+  return true;
+}
+function sorted(list) {
+  const byName = (a, b) => a.name.localeCompare(b.name);
+  const s = state.sort;
+  return list.slice().sort((a, b) => {
+    if (s === 'name') return byName(a, b);
+    if (s === 'recent') return (b.lastYear - a.lastYear) || byName(a, b);
+    if (s === 'first') return (a.firstYear - b.firstYear) || byName(a, b);
+    return (VERDICT_ORDER.indexOf(a.verdict) - VERDICT_ORDER.indexOf(b.verdict)) || byName(a, b);
+  });
+}
+function applyFilters() {
+  const ol = $('#rows');
+  let shown = 0;
+  for (const c of sorted(C)) {
+    const li = document.getElementById(c.id);
+    if (!li) continue;
+    const ok = matches(c);
+    li.hidden = !ok;
+    if (ok) shown++;
+    ol.appendChild(li);
+  }
+  let empty = $('#emptyRow');
+  if (!shown) {
+    if (!empty) {
+      empty = document.createElement('li');
+      empty.id = 'emptyRow';
+      empty.className = 'empty';
+      empty.innerHTML = 'No compounds match. <button class="linkbtn" type="button" data-clear>Clear filters</button>';
+      ol.appendChild(empty);
+    }
+  } else if (empty) empty.remove();
+  const active = activeFilters();
+  $('#count').textContent = active ? `Showing ${shown} of ${C.length} compounds` : `All ${C.length} compounds`;
+  $('#clear').hidden = !active;
+}
+
+/* ---------- list rows ---------- */
+function rowHTML(c) {
+  const g = c.g;
+  const tags = (c.popular && c.popular.flag ? `<span class="tag" title="${esc(c.popular.reason || '')}">${c.famousFailed ? 'Famous but failed' : 'Popular'}</span>` : '') +
+    (REVIEW && c.needsReview ? '<span class="tag flag" title="Some values need checking against the paper">Needs review</span>' : '');
+  const hum = g.tier === 'not_graded' ? `<span class="grade g-not_graded">${dotsHTML('not_graded')}<span>Not yet graded</span></span>` : gradeHTML(g);
+  return `<li class="row" id="${esc(c.id)}"><details>
+    <summary>
+      <span class="s-tile">${tileHTML(c, 'sm')}</span>
+      <span class="s-name"><span class="nm">${esc(c.name)}</span>${tags}<span class="cat">${esc(c.category)}</span></span>
+      <span class="s-mice"><span class="s-lab">Mice</span><span class="vd">${esc(V_SHORT[c.verdict])}</span><span class="sxl" aria-hidden="true">${esc(sexLine(c))}</span><span class="sr">${esc(sexSR(c))}</span></span>
+      <span class="s-hum"><span class="s-lab">Humans</span>${hum}</span>
+      <span class="s-chev">${SVG_CHEV}</span>
+    </summary>
+    <div class="detail" data-for="${esc(c.id)}"></div>
+  </details></li>`;
+}
+function renderRows() {
+  $('#rows').innerHTML = C.map(rowHTML).join('');
+}
+
+function sexFact(s) {
+  const of = k => s.n === 1 ? '(1 test)' : `in ${k} of ${s.n} tests`;
+  const trend = (s.tl ? [`trend toward longer life in ${s.tl === s.n ? 'that test' : plural(s.tl, 'test')}`] : [])
+    .concat(s.ts ? [`trend toward shorter life in ${s.ts === s.n ? 'that test' : plural(s.ts, 'test')}`] : []);
+  if (s.ext) return `Extended ${of(s.ext)}` + (s.sh ? `; shortened in ${s.sh}` : '');
+  if (s.sh) return `Shortened ${of(s.sh)}`;
+  return `No significant effect (${plural(s.n, 'test')})` + (trend.length ? `; ${trend.join('; ')}` : '');
+}
+function sexCell(r, sex) {
+  r = r || {result: 'unknown'};
+  const cls = R_CLASS[r.result] || 'nt';
+  const lead = `<span class="sxg" aria-hidden="true">${sex === 'male' ? '♂' : '♀'}</span><span class="sr">${sex === 'male' ? 'Males' : 'Females'}:</span>`;
+  const word = `<span class="res">${ICON[cls]}<span>${esc(R_WORD[r.result] || r.result)}</span></span>`;
+  const tdc = `sx c-${sex === 'male' ? 'm' : 'f'}`;
+  if (r.result === 'not_tested') return `<td class="${tdc}"><div>${lead}${word}</div></td>`;
+  const pct = fmtPct(r.median_change_pct);
+  const p = fmtP(r.p);
+  const mx = pct ? `<span class="mx">${barHTML(r.median_change_pct, cls)}<span class="pct">${esc(pct)}</span></span>`
+                 : `<span class="mx"><span class="pct muted" title="Median change not reported or not captured"><span aria-hidden="true">—</span><span class="sr">median change not reported</span></span></span>`;
+  return `<td class="${tdc}"><div>${lead}${word}${mx}${p ? `<span class="pv">${esc(p)}</span>` : ''}</div></td>`;
+}
+function testsHTML(c) {
+  const body = c.cohorts.map(x => {
+    const sched = x.schedule && x.schedule !== 'Continuous, in chow' ? `<span class="sch">${esc(x.schedule)}</span>` : '';
+    const notes = [];
+    if (x.note) notes.push(`<span class="xnote">${esc(x.note)}</span>`);
+    if (x.test && x.test !== DEFAULT_TEST) notes.push(`<span class="xnote"><b>Statistical test:</b> ${esc(x.test)}</span>`);
+    if (x.dose_source && x.dose_source !== x.source) notes.push(`<span class="xnote"><b>Dose source:</b> ${srcLink(x.dose_source)}</span>`);
+    if (x.verification && x.verification.status === 'needs_review') notes.push(`<span class="xnote chk"><b>Needs review:</b> ${esc(x.verification.note)}</span>`);
+    return `<tr>
+        <th scope="row"><span class="co">${esc(x.cohort)}</span>${x.label ? `<span class="tl">${esc(x.label)}</span>` : ''}${sched}<span class="ph-meta">${esc(fmtDose(x.dose_ppm))} ppm · started at ${esc(x.start_age_months)} mo${x.dose_note ? ` · ${esc(x.dose_note)}` : ''}</span></th>
+        <td class="c-dose">${esc(fmtDose(x.dose_ppm))} ppm${x.dose_note ? `<span class="dn">${esc(x.dose_note)}</span>` : ''}</td>
+        <td class="c-age">${esc(x.start_age_months)} mo</td>
+        ${sexCell(x.male, 'male')}
+        ${sexCell(x.female, 'female')}
+        <td class="c-src">${srcLink(x.source)}</td>
+      </tr>${notes.length ? `<tr class="xrow"><td colspan="6">${notes.join('')}</td></tr>` : ''}`;
+  }).join('');
+  return `<div class="tablewrap"><table class="tests">
+      <caption class="sr">ITP tests of ${esc(c.name)}</caption>
+      <thead><tr><th scope="col">Test</th><th scope="col">Dose in chow</th><th scope="col">Started at</th><th scope="col">♂ Males</th><th scope="col">♀ Females</th><th scope="col">Source</th></tr></thead>
+      <tbody>${body}</tbody></table></div>
+    <p class="tnote">Statistical test, unless noted: ${esc(DEFAULT_TEST)}. Bars show the change in median lifespan versus same-sex controls, on one scale for every compound (−15% to +40%). Ages are in months.</p>`;
+}
+function readingsHTML(c) {
+  const ra = (c.reanalyses || []).find(r => r.male || r.female);
+  if (!ra || c.cohorts.length !== 1) return '';
+  const x = c.cohorts[0];
+  const cell = r => {
+    if (!r) return '<td>—</td>';
+    const cls = R_CLASS[r.result] || 'nt';
+    return `<td><span class="res">${ICON[cls]}<span>${esc(r.result === 'extended' ? 'Lived longer' : R_WORD[r.result])}</span></span>${r.p ? `<span class="pv">${esc(fmtP(r.p))}</span>` : ''}</td>`;
+  };
+  const s = SRC[ra.source] || {};
+  return `<div class="callout readings">
+    <h4>Two readings of the same mice</h4>
+    <div class="tablewrap"><table>
+      <thead><tr><th scope="col">Analysis</th><th scope="col">♂ Males</th><th scope="col">♀ Females</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">ITP main analysis<span>Log-rank · ${srcLink(x.source)}</span></th>${cell(x.male)}${cell(x.female)}</tr>
+        <tr><th scope="row">Later reanalysis<span>${esc(ra.method || 'Reanalysis')} · ${srcLink(ra.source, (s.short || '').replace(/\s*\(.*\)\s*$/, ''))}</span></th>${cell(ra.male)}${cell(ra.female)}</tr>
+      </tbody></table></div>
+    ${c.explainer ? `<p>${esc(c.explainer)}</p>` : ''}
+    <p class="re-note">The verdict above follows the ITP’s main analysis, as it does for every compound.</p>
+  </div>`;
+}
+function reanalysesHTML(c) {
+  const out = [];
+  const hasReadings = !!readingsHTML(c);
+  if (hasReadings) out.push(readingsHTML(c));
+  for (const ra of c.reanalyses || []) {
+    if (hasReadings && (ra.male || ra.female)) continue;
+    out.push(`<div class="callout"><h4>Later reanalysis · ${srcLink(ra.source)}</h4><p>${esc(ra.finding)}</p>${ra.changes_reading ? '<p class="re-note">This reading differs from the ITP’s main analysis. The verdict above follows the main analysis.</p>' : ''}</div>`);
+  }
+  if (c.explainer && !hasReadings) out.push(`<div class="callout"><h4>Two tests, two readings</h4><p>${esc(c.explainer)}</p></div>`);
+  return out.join('');
+}
+function miceHTML(c) {
+  const rep = c.replication && D.definitions.replication ? D.definitions.replication[c.replication] : '';
+  const years = c.firstYear === c.lastYear ? `${c.firstYear}` : `${c.firstYear}–${c.lastYear}`;
+  const vdesc = (D.definitions.verdict_descriptions || {})[c.verdict] || '';
+  return `<section class="sec mice" aria-label="In mice: ITP result">
+    <div class="sec-head"><h3>In mice <span>· ITP lifespan result</span></h3><span class="kind fact">Published result</span></div>
+    <p class="meaning">${esc(c.meaning)}</p>
+    <dl class="facts">
+      <div class="f-v"><dt>Verdict</dt><dd>${tileHTML(c)}<strong>${esc(V_SHORT[c.verdict])}</strong><br><span class="muted">${esc(vdesc)}</span></dd></div>
+      <div><dt>♂ Males</dt><dd>${esc(sexFact(c.sx.male))}</dd></div>
+      <div><dt>♀ Females</dt><dd>${esc(sexFact(c.sx.female))}</dd></div>
+      ${rep ? `<div><dt>Replication</dt><dd>${esc(rep)}</dd></div>` : ''}
+      <div><dt>Tested</dt><dd>${esc(years)} · ${plural(c.cohorts.length, 'test')}</dd></div>
+    </dl>
+    ${testsHTML(c)}
+    ${reanalysesHTML(c)}
+    ${c.notes && c.notes.length ? `<ul class="notes">${c.notes.map(n => `<li>${esc(n)}</li>`).join('')}</ul>` : ''}
+  </section>`;
+}
+function humansHTML(c) {
+  const g = c.g;
+  const head = `<div class="sec-head"><h3>In humans <span>· LEV’s evidence grade</span></h3><span class="kind judg">Editorial judgment</span></div>`;
+  if (g.tier === 'not_graded') {
+    return `<section class="sec humans" aria-label="In humans: LEV's evidence grade">${head}
+      <div class="gbig">${gradeHTML(g, true)}</div>
+      <p class="ng">LEV hasn’t reviewed the human evidence for ${esc(c.name)} yet. A missing grade is not a verdict either way.</p>
+    </section>`;
+  }
+  const def = (TIERS[g.tier] || {}).definition || '';
+  return `<section class="sec humans" aria-label="In humans: LEV's evidence grade">${head}
+    <div class="gbig">${gradeHTML(g, true)}</div>
+    <p class="tierdef">${esc(def)}</p>
+    <dl class="claim"><div><dt>What we graded</dt><dd>${esc(g.claim)}</dd></div><div><dt>In whom</dt><dd>${esc(g.population)}</dd></div></dl>
+    <p class="stmt">${esc(g.statement)}</p>
+    <p class="summ">${esc(g.summary)}</p>
+    ${g.established_use ? `<p class="est"><strong>Established medical use:</strong> ${esc(g.established_use)}</p>` : ''}
+    ${g.sources && g.sources.length ? `<div class="hsrc"><h4>Key human sources</h4><ol class="reflist">${g.sources.map(refHTML).join('')}</ol></div>` : ''}
+    <p class="revd">${g.last_reviewed ? `Last reviewed ${esc(fmtDate(g.last_reviewed))} · ` : ''}${g.draft ? 'Draft, awaiting editor approval. Drafts never appear on the public site.' : 'Approved by LEV’s editor.'}</p>
+    ${REVIEW && g.review_note ? `<div class="revonly"><span class="rl">Editor’s note · review copy only</span>${esc(g.review_note)}</div>` : ''}
+  </section>`;
+}
+function detailHTML(c) {
+  const itpKeys = [];
+  for (const x of c.cohorts) if (!itpKeys.includes(x.source)) itpKeys.push(x.source);
+  for (const r of c.reanalyses || []) if (!itpKeys.includes(r.source)) itpKeys.push(r.source);
+  const v = c.verification || {};
+  const verif = v.status === 'verified'
+    ? `<p class="verif ok">${SVG_OK}<span>Checked against the cited papers. ${esc(v.note || '')}</span></p>`
+    : `<p class="verif nr">${SVG_FLAG}<span><strong>Needs review.</strong> ${esc(v.note || '')}</span></p>`;
+  return `
+    ${c.popular && c.popular.flag ? `<p class="popline">${SVG_STAR}<span><strong>Popular:</strong> ${esc(c.popular.reason)}</span></p>` : ''}
+    ${miceHTML(c)}
+    ${humansHTML(c)}
+    ${REVIEW && c.open_questions && c.open_questions.length ? `<div class="revonly"><span class="rl">Open questions for the editor · review copy only</span><ul>${c.open_questions.map(q => `<li>${esc(q)}</li>`).join('')}</ul></div>` : ''}
+    <div class="refs"><h4>ITP sources</h4><ol class="reflist">${itpKeys.map(refHTML).join('')}</ol></div>
+    <div class="dfoot">${verif}<button class="btn" type="button" data-copy="${esc(c.id)}">${SVG_LINK}<span>Copy link to ${esc(c.name)}</span></button></div>`;
+}
+function ensureDetail(det) {
+  const box = det.querySelector('.detail');
+  if (!box || box.dataset.built) return;
+  const c = BY[box.dataset.for];
+  box.innerHTML = detailHTML(c);
+  box.dataset.built = '1';
+}
+
+/* ---------- deep links ---------- */
+function shareURL(id) {
+  const canonical = (D.meta.canonical_url || '').trim();
+  const base = canonical || location.href.split('#')[0];
+  return base + '#' + id;
+}
+function openCompound(id, opts) {
+  opts = opts || {};
+  const c = BY[id];
+  if (!c) return false;
+  if (!matches(c)) resetFilters();
+  const li = document.getElementById(id);
+  const det = li.querySelector('details');
+  ensureDetail(det);
+  det.open = true;
+  const go = () => {
+    li.scrollIntoView({behavior: (opts.instant || reduceMotion) ? 'auto' : 'smooth', block: 'start'});
+    li.classList.remove('flash'); void li.offsetWidth; li.classList.add('flash');
+    if (opts.focus !== false) det.querySelector('summary').focus({preventScroll: true});
+  };
+  requestAnimationFrame(go);
+  try { history.replaceState(null, '', '#' + id); } catch (e) { /* not allowed in this frame */ }
+  return true;
+}
+function handleHash(instant) {
+  const id = decodeURIComponent((location.hash || '').slice(1));
+  if (id && BY[id]) openCompound(id, {instant, focus: false});
+}
+
+/* ---------- toast + copy ---------- */
+let toastTimer = null;
+function toast(msg) {
+  const t = $('#toast');
+  t.textContent = msg;
+  t.hidden = false;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { t.hidden = true; }, 2600);
+}
+function copyText(text, holder, okMsg) {
+  const fallback = () => {
+    if (!holder) return;
+    let f = holder.querySelector('.copyfall');
+    if (!f) {
+      f = document.createElement('div');
+      f.className = 'copyfall';
+      f.innerHTML = '<label class="sr">Link to copy</label><input type="text" readonly>';
+      holder.appendChild(f);
+    }
+    const input = f.querySelector('input');
+    input.value = text;
+    input.focus();
+    input.select();
+    toast('Copy the selected link');
+  };
+  try {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(() => toast(okMsg || 'Copied'), fallback);
+    } else fallback();
+  } catch (e) { fallback(); }
+}
+
+/* ---------- how to read, notify, downloads, footer ---------- */
+function renderHow() {
+  const defs = D.definitions;
+  const vdesc = defs.verdict_descriptions || {};
+  $('#verdictDefs').innerHTML = VERDICT_ORDER.map(v => `<div><dt>${esc(V_SHORT[v])}</dt><dd>${esc(vdesc[v] || defs.verdicts[v])}</dd></div>`).join('');
+  if (defs.replication) $('#replicationDefs').textContent = Object.values(defs.replication).join(' ');
+  $('#tierDefs').innerHTML = TIER_ORDER.map(t => `<li><span class="grade g-${t}">${dotsHTML(t)}<span>${esc(TIERS[t].label)}</span></span><p>${esc(TIERS[t].definition)}</p></li>`).join('');
+  const ages = [];
+  for (const c of C) for (const x of c.cohorts) String(x.start_age_months).split(/[^0-9.]+/).forEach(a => { const n = parseFloat(a); if (isFinite(n)) ages.push(n); });
+  document.querySelectorAll('[data-k="ageMin"]').forEach(el => { el.textContent = Math.min(...ages); });
+  document.querySelectorAll('[data-k="ageMax"]').forEach(el => { el.textContent = Math.max(...ages); });
+  document.querySelectorAll('a.cite[data-src]').forEach(a => {
+    const s = SRC[a.dataset.src];
+    if (!s) { a.remove(); return; }
+    a.href = srcURL(s);
+    a.target = '_blank';
+    a.rel = 'noopener';
+    a.textContent = `(${s.short})`;
+  });
+  $('#howSources').innerHTML = ['nadon2008', 'miller2007', 'jiang2024', 'parker2026', 'mpd_itp1'].filter(k => SRC[k]).map(refHTML).join('');
+  const m = D.meta;
+  $('#updated').innerHTML = `Data last updated <strong>${esc(fmtDate(m.last_updated))}</strong>. Literature checked through ${esc(fmtDate(m.literature_through))}. Dataset version ${esc(m.dataset_version)}.`;
+  $('#changelog').innerHTML = (m.changelog || []).slice().reverse().map(e => `<li><time datetime="${esc(e.date)}">${esc(fmtDate(e.date))}</time>${esc(e.change)}</li>`).join('');
+  const email = (m.corrections_email || '').trim();
+  const corr = $('#corrections');
+  if (email) {
+    corr.innerHTML = `<span class="addr"><code>${esc(email)}</code><button class="btn" type="button" data-copytext="${esc(email)}">Copy address</button></span>`;
+  } else if (REVIEW) {
+    corr.innerHTML = '<span class="ph">[CORRECTIONS EMAIL]</span>';
+  } else {
+    corr.textContent = 'LEV Institute';
+  }
+}
+function renderNotify() {
+  const url = (D.meta.signup_url || '').trim();
+  const box = $('#notifyAction');
+  if (url) {
+    box.innerHTML = `<a class="btn primary" href="${esc(url)}" target="_blank" rel="noopener">Sign up for updates</a>`;
+  } else if (REVIEW) {
+    box.innerHTML = '<span class="btn primary" aria-disabled="true">Sign up for updates</span>';
+    const note = $('#notifyNote');
+    note.hidden = false;
+    note.innerHTML = 'Review copy: the button will link to <span class="ph">[MY NEWSLETTER SIGNUP URL]</span>. Add it as <code>meta.signup_url</code> in the data file.';
+  } else {
+    $('#get-notified').hidden = true;
+    $('#navNotify').hidden = true;
+  }
+}
+function renderReviewBanner() {
+  if (!REVIEW) return;
+  const drafts = C.filter(c => c.g.draft).length;
+  const rows = C.reduce((n, c) => n + c.cohorts.filter(x => x.verification && x.verification.status === 'needs_review').length, 0);
+  const qs = C.reduce((n, c) => n + ((c.open_questions || []).length), 0);
+  $('#reviewText').innerHTML = `<b>Review copy · not public</b><span>${plural(drafts, 'draft grade')} · ${plural(rows, 'test row')} to check · ${plural(qs, 'open question')}</span><span class="rb-more">Drafts, editor’s notes and open questions are removed from the public build.</span>`;
+  $('#reviewBanner').hidden = false;
+}
+function renderFooter() {
+  const m = D.meta;
+  $('#footMeta').textContent = `Dataset ${m.dataset_version} · data last updated ${fmtDate(m.last_updated)}.`;
+}
+async function setupDownloads() {
+  const items = [
+    {file: 'data/scoreboard.json', name: 'lev-scoreboard.json', label: 'Full dataset', fmt: 'JSON'},
+    {file: 'data/compounds.csv', name: 'lev-scoreboard-compounds.csv', label: 'Compounds', fmt: 'CSV'},
+    {file: 'data/cohorts.csv', name: 'lev-scoreboard-tests.csv', label: 'Tests', fmt: 'CSV'},
+  ];
+  const box = $('#downloads');
+  const draw = mode => {
+    box.innerHTML = items.map((it, i) => mode === 'save'
+      ? `<button class="btn" type="button" data-dl="${i}">${SVG_DL}<span>${esc(it.label)}</span><span class="fmt">${it.fmt}</span></button>`
+      : `<a class="btn" href="${esc(it.file)}" download="${esc(it.name)}">${SVG_DL}<span>${esc(it.label)}</span><span class="fmt">${it.fmt}</span></a>`).join('');
+  };
+  draw('link');
+  const hasClaude = !!(window.claude && typeof window.claude.use === 'function');
+  if (!hasClaude) return;              // own domain: plain links work
+  let dl = null;
+  try { dl = await window.claude.use('downloads'); } catch (e) { dl = null; }
+  if (!dl) return;
+  draw('save');
+  box.addEventListener('click', async ev => {
+    const b = ev.target.closest('[data-dl]');
+    if (!b) return;
+    const it = items[Number(b.dataset.dl)];
+    b.disabled = true;
+    try {
+      const res = await fetch(it.file, {cache: 'no-store'});
+      if (!res.ok) throw {code: 'fetch'};
+      const text = await res.text();
+      const out = await dl.save({filename: it.name, data: text});
+      if (out && out.status === 'saved') toast(`${it.label} saved`);
+    } catch (err) {
+      const code = err && err.code;
+      if (code === 'declined') { /* viewer said no */ }
+      else if (code === 'rate_limited') toast('A download is already waiting for your answer.');
+      else toast('This download isn’t available here.');
+    } finally { b.disabled = false; }
+  });
+}
+
+/* ---------- events ---------- */
+function bind() {
+  let qTimer = null;
+  $('#q').addEventListener('input', e => {
+    clearTimeout(qTimer);
+    qTimer = setTimeout(() => { state.q = e.target.value.trim(); syncControls(); applyFilters(); }, 90);
+  });
+  const onSel = (id, key) => $(id).addEventListener('change', e => { state[key] = e.target.value; syncControls(); applyFilters(); });
+  onSel('#fVerdict', 'verdict'); onSel('#fSex', 'sex'); onSel('#fGrade', 'grade'); onSel('#fSort', 'sort');
+  $('#fFamous').addEventListener('click', () => { state.famous = !state.famous; syncControls(); applyFilters(); });
+  $('#fReview').addEventListener('click', () => { state.review = !state.review; syncControls(); applyFilters(); });
+  $('#clear').addEventListener('click', resetFilters);
+  $('#ftoggle').addEventListener('click', () => {
+    const ctr = $('#controls');
+    const open = !ctr.classList.contains('open');
+    ctr.classList.toggle('open', open);
+    $('#ftoggle').setAttribute('aria-expanded', String(open));
+  });
+  $('#rows').addEventListener('toggle', e => {
+    const det = e.target;
+    if (det.tagName !== 'DETAILS') return;
+    if (det.open) {
+      ensureDetail(det);
+      const id = det.closest('.row').id;
+      try { history.replaceState(null, '', '#' + id); } catch (err) { /* ignore */ }
+    }
+  }, true);
+  document.addEventListener('click', e => {
+    const copyBtn = e.target.closest('[data-copy]');
+    if (copyBtn) { copyText(shareURL(copyBtn.dataset.copy), copyBtn.closest('.dfoot'), 'Link copied'); return; }
+    const copyTextBtn = e.target.closest('[data-copytext]');
+    if (copyTextBtn) { copyText(copyTextBtn.dataset.copytext, copyTextBtn.parentElement, 'Address copied'); return; }
+    if (e.target.closest('[data-clear]')) { resetFilters(); return; }
+    const tile = e.target.closest('.btile');
+    if (tile) { hideTip(); openCompound(tile.dataset.id); return; }
+    if (e.target.closest('#famousHook')) {
+      Object.assign(state, {q: '', verdict: 'all', sex: 'any', grade: 'any', famous: true, review: false});
+      syncControls(); applyFilters();
+      document.getElementById('compounds').scrollIntoView({behavior: reduceMotion ? 'auto' : 'smooth', block: 'start'});
+      return;
+    }
+    const lab = e.target.closest('.blabel');
+    if (lab) {
+      Object.assign(state, {q: '', verdict: lab.dataset.verdict, sex: 'any', grade: 'any', famous: false, review: false});
+      syncControls(); applyFilters();
+      document.getElementById('compounds').scrollIntoView({behavior: reduceMotion ? 'auto' : 'smooth', block: 'start'});
+    }
+  });
+  const board = $('#board');
+  board.addEventListener('pointerover', e => { const b = e.target.closest('.btile'); if (b && e.pointerType !== 'touch') showTip(b); });
+  board.addEventListener('pointerout', e => { if (e.target.closest('.btile')) hideTip(); });
+  board.addEventListener('focusin', e => { const b = e.target.closest('.btile'); if (b) showTip(b); });
+  board.addEventListener('focusout', hideTip);
+  window.addEventListener('scroll', hideTip, {passive: true});
+  window.addEventListener('hashchange', () => handleHash(false));
+  const ctr = $('#controls');
+  const setH = () => document.documentElement.style.setProperty('--sticky-h', ctr.offsetHeight + 'px');
+  setH();
+  if (window.ResizeObserver) new ResizeObserver(setH).observe(ctr); else window.addEventListener('resize', setH);
+}
+
+/* ---------- start ---------- */
+async function init() {
+  try {
+    const res = await fetch(DATA_URL, {cache: 'no-cache'});
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    D = await res.json();
+  } catch (err) {
+    $('#rows').innerHTML = `<li class="empty">Couldn’t load <code>${DATA_URL}</code>. If you opened this file directly from disk, serve the folder from a web server instead.</li>`;
+    return;
+  }
+  SRC = D.sources || {};
+  TIERS = D.definitions.tiers;
+  REVIEW = D.meta.review_mode === true;
+  C = D.compounds.slice();
+  C.forEach(prep);
+  const testCounts = {};
+  for (const c of C) for (const x of c.cohorts) testCounts[x.test] = (testCounts[x.test] || 0) + 1;
+  DEFAULT_TEST = Object.keys(testCounts).sort((a, b) => testCounts[b] - testCounts[a])[0] || '';
+  BY = Object.fromEntries(C.map(c => [c.id, c]));
+  renderReviewBanner();
+  renderHero();
+  renderBoard();
+  renderControls();
+  renderRows();
+  syncControls();
+  applyFilters();
+  renderHow();
+  renderNotify();
+  renderFooter();
+  bind();
+  setupDownloads();
+  handleHash(true);
+}
+init();
+})();
+</script>
+
+</body>
+</html>
