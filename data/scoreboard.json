@@ -3,8 +3,8 @@
   "meta": {
     "title": "The LEV Scoreboard",
     "publisher": "LEV Institute",
-    "dataset_version": "1.0.0-draft",
-    "last_updated": "2026-10-02",
+    "dataset_version": "1.1.0-draft",
+    "last_updated": "2026-10-17",
     "literature_through": "2026-10-02",
     "canonical_url": "https://the-ljaw.github.io/lev-scoreboard/",
     "signup_url": "",
@@ -16,8 +16,14 @@
         "date": "2026-10-02",
         "version": "1.0.0-draft",
         "change": "First draft for editorial review: 66 interventions, 104 test rows, 12 draft human-evidence grades."
+      },
+      {
+        "date": "2026-10-17",
+        "version": "1.1.0-draft",
+        "change": "Draft human-evidence grades added for glycine, astaxanthin, green tea extract, oxaloacetic acid, MCT oil, mitoquinone and the Nrf2-activator herbal blend (awaiting editor approval). Share images and per-compound share links added to the public site."
       }
-    ]
+    ],
+    "share_pages": true
   },
   "method": {
     "primary_test": "The ITP's pre-specified primary analysis: a log-rank test comparing treated and control mice of the same sex, stratified by test site, with data pooled across the three sites.",
@@ -658,6 +664,152 @@
       "citation": "ClinicalTrials.gov NCT02953093",
       "url": "https://clinicaltrials.gov/study/NCT02953093",
       "kind": "trial_registration"
+    },
+    "kumar_2023_glynac_rct": {
+      "short": "Kumar et al. 2023",
+      "title": "Supplementing Glycine and N-Acetylcysteine (GlyNAC) in Older Adults Improves Glutathione Deficiency, Oxidative Stress, Mitochondrial Dysfunction, Inflammation, Physical Function, and Aging Hallmarks: A Randomized Clinical Trial",
+      "journal": "The Journals of Gerontology, Series A: Biological Sciences and Medical Sciences",
+      "year": 2023,
+      "citation": "J Gerontol A Biol Sci Med Sci. 2023;78(1):75-89",
+      "pmid": "35975308",
+      "doi": "10.1093/gerona/glac135",
+      "kind": "human_rct",
+      "url": "https://doi.org/10.1093/gerona/glac135"
+    },
+    "wittemans_2019_glycine_mr": {
+      "short": "Wittemans et al. 2019",
+      "title": "Assessing the causal association of glycine with risk of cardio-metabolic diseases",
+      "journal": "Nature Communications",
+      "year": 2019,
+      "citation": "Nat Commun. 2019;10(1)",
+      "doi": "10.1038/s41467-019-08936-1",
+      "kind": "human_observational",
+      "url": "https://doi.org/10.1038/s41467-019-08936-1"
+    },
+    "wu_2020_oxidative_stress_meta": {
+      "short": "Wu et al. 2020",
+      "title": "Effects of Astaxanthin Supplementation on Oxidative Stress: A Systematic Review and Meta-Analysis of Randomized Controlled Trials",
+      "journal": "International Journal for Vitamin and Nutrition Research",
+      "year": 2020,
+      "citation": "Int J Vitam Nutr Res. 2020;90(1-2):179-194",
+      "doi": "10.1024/0300-9831/a000497",
+      "kind": "human_meta_analysis",
+      "url": "https://doi.org/10.1024/0300-9831/a000497"
+    },
+    "zhou_2021_skin_meta": {
+      "short": "Zhou et al. 2021",
+      "title": "Systematic Review and Meta-Analysis on the Effects of Astaxanthin on Human Skin Ageing",
+      "journal": "Nutrients",
+      "year": 2021,
+      "citation": "Nutrients. 2021;13(9):2917",
+      "doi": "10.3390/nu13092917",
+      "kind": "human_meta_analysis",
+      "url": "https://doi.org/10.3390/nu13092917"
+    },
+    "filippini_2020_cochrane": {
+      "short": "Filippini et al. 2020",
+      "title": "Green tea (Camellia sinensis) for the prevention of cancer",
+      "journal": "Cochrane Database of Systematic Reviews",
+      "year": 2020,
+      "citation": "Cochrane Database Syst Rev. 2020;(3):CD005004",
+      "doi": "10.1002/14651858.CD005004.pub3",
+      "kind": "human_meta_analysis",
+      "url": "https://doi.org/10.1002/14651858.CD005004.pub3"
+    },
+    "yu_2017_mgtt_liver": {
+      "short": "Yu et al. 2017",
+      "title": "Effect of green tea supplements on liver enzyme elevation: Results from a randomized intervention study in the United States",
+      "journal": "Cancer Prevention Research",
+      "year": 2017,
+      "citation": "Cancer Prev Res (Phila). 2017;10(10):571-579",
+      "pmid": "28765194",
+      "doi": "10.1158/1940-6207.CAPR-17-0160",
+      "kind": "human_rct",
+      "url": "https://doi.org/10.1158/1940-6207.CAPR-17-0160"
+    },
+    "efsa_2018_catechins": {
+      "short": "EFSA ANS Panel 2018",
+      "title": "Scientific opinion on the safety of green tea catechins",
+      "journal": "EFSA Journal",
+      "year": 2018,
+      "citation": "EFSA J. 2018;16(4):5239",
+      "doi": "10.2903/j.efsa.2018.5239",
+      "kind": "regulatory",
+      "url": "https://doi.org/10.2903/j.efsa.2018.5239"
+    },
+    "vidoni_2021_alzheimers": {
+      "short": "Vidoni et al. 2021",
+      "title": "Safety and target engagement profile of two oxaloacetate doses in Alzheimer's patients",
+      "journal": "Alzheimer's & Dementia",
+      "year": 2021,
+      "citation": "Alzheimers Dement. 2021;17(1)",
+      "pmid": "32715609",
+      "doi": "10.1002/alz.12156",
+      "kind": "human_rct",
+      "url": "https://doi.org/10.1002/alz.12156"
+    },
+    "cash_2024_restore_me": {
+      "short": "Cash et al. 2024",
+      "title": "RESTORE ME: a RCT of oxaloacetate for improving fatigue in patients with myalgic encephalomyelitis/chronic fatigue syndrome",
+      "journal": "Frontiers in Neurology",
+      "year": 2024,
+      "citation": "Front Neurol. 2024;15:1483876",
+      "doi": "10.3389/fneur.2024.1483876",
+      "kind": "human_rct",
+      "url": "https://doi.org/10.3389/fneur.2024.1483876"
+    },
+    "fortier_2021_benefic": {
+      "short": "Fortier et al. 2021",
+      "title": "A ketogenic drink improves cognition in mild cognitive impairment: Results of a 6-month RCT",
+      "journal": "Alzheimer's & Dementia",
+      "year": 2021,
+      "citation": "Alzheimers Dement. 2021;17(3):543-552",
+      "pmid": "33103819",
+      "doi": "10.1002/alz.12206",
+      "kind": "human_rct",
+      "url": "https://doi.org/10.1002/alz.12206"
+    },
+    "henderson_2020_nourish_ad": {
+      "short": "Henderson et al. 2020",
+      "title": "A Placebo-Controlled, Parallel-Group, Randomized Clinical Trial of AC-1204 in Mild-to-Moderate Alzheimer's Disease",
+      "journal": "Journal of Alzheimer's Disease",
+      "year": 2020,
+      "citation": "J Alzheimers Dis. 2020;75(2):547-557",
+      "pmid": "32310169",
+      "doi": "10.3233/JAD-191302",
+      "kind": "human_rct",
+      "url": "https://doi.org/10.3233/JAD-191302"
+    },
+    "rossman_2018_vascular": {
+      "short": "Rossman et al. 2018",
+      "title": "Chronic Supplementation With a Mitochondrial Antioxidant (MitoQ) Improves Vascular Function in Healthy Older Adults",
+      "journal": "Hypertension",
+      "year": 2018,
+      "citation": "Hypertension. 2018;71(6):1056-1063",
+      "pmid": "29661838",
+      "kind": "human_rct",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/29661838/"
+    },
+    "gonzalo_skok_2024_meta": {
+      "short": "Gonzalo-Skok and Casuso 2024",
+      "title": "Effects of Mitoquinone (MitoQ) Supplementation on Aerobic Exercise Performance and Oxidative Damage: A Systematic Review and Meta-analysis",
+      "journal": "Sports Medicine - Open",
+      "year": 2024,
+      "citation": "Sports Med Open. 2024;10:77",
+      "doi": "10.1186/s40798-024-00741-5",
+      "kind": "human_meta_analysis",
+      "url": "https://doi.org/10.1186/s40798-024-00741-5"
+    },
+    "ueberschlag_2016_runners": {
+      "short": "Ueberschlag et al. 2016",
+      "title": "The Effect of Protandim® Supplementation on Athletic Performance and Oxidative Blood Markers in Runners",
+      "journal": "PLoS ONE",
+      "year": 2016,
+      "citation": "PLoS One. 2016;11(8):e0160559",
+      "pmid": "27513339",
+      "doi": "10.1371/journal.pone.0160559",
+      "kind": "human_rct",
+      "url": "https://doi.org/10.1371/journal.pone.0160559"
     }
   },
   "compounds": [

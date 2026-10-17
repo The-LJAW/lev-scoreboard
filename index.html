@@ -9,6 +9,8 @@
 <meta property="og:type" content="website">
 <link rel="canonical" href="https://the-ljaw.github.io/lev-scoreboard/">
 <meta property="og:url" content="https://the-ljaw.github.io/lev-scoreboard/">
+<meta property="og:image" content="https://the-ljaw.github.io/lev-scoreboard/cards/site.png">
+<meta name="twitter:card" content="summary_large_image">
 </head>
 <body>
 <title>The LEV Scoreboard</title>
@@ -1051,7 +1053,7 @@ function detailHTML(c) {
   for (const r of c.reanalyses || []) if (!itpKeys.includes(r.source)) itpKeys.push(r.source);
   const v = c.verification || {};
   const verif = v.status === 'verified'
-    ? `<p class="verif ok">${SVG_OK}<span>Checked against the cited papers. ${esc(v.note || '')}</span></p>`
+    ? `<p class="verif ok">${SVG_OK}<span>${esc(v.note || 'Checked against the cited papers.')}</span></p>`
     : `<p class="verif nr">${SVG_FLAG}<span><strong>Needs review.</strong> ${esc(v.note || '')}</span></p>`;
   return `
     ${c.popular && c.popular.flag ? `<p class="popline">${SVG_STAR}<span><strong>Popular:</strong> ${esc(c.popular.reason)}</span></p>` : ''}
@@ -1059,7 +1061,7 @@ function detailHTML(c) {
     ${humansHTML(c)}
     ${REVIEW && c.open_questions && c.open_questions.length ? `<div class="revonly"><span class="rl">Open questions for the editor · review copy only</span><ul>${c.open_questions.map(q => `<li>${esc(q)}</li>`).join('')}</ul></div>` : ''}
     <div class="refs"><h4>ITP sources</h4><ol class="reflist">${itpKeys.map(refHTML).join('')}</ol></div>
-    <div class="dfoot">${verif}<button class="btn" type="button" data-copy="${esc(c.id)}">${SVG_LINK}<span>Copy link to ${esc(c.name)}</span></button></div>`;
+    <div class="dfoot">${verif}<span class="dl-row" style="margin:0"><button class="btn" type="button" data-copy="${esc(c.id)}">${SVG_LINK}<span>Copy link to ${esc(c.name)}</span></button>${D.meta.share_pages ? `<a class="btn" href="cards/${esc(c.id)}.png" target="_blank" rel="noopener">${SVG_DL}<span>Share image</span></a>` : ''}</span></div>`;
 }
 function ensureDetail(det) {
   const box = det.querySelector('.detail');
@@ -1072,6 +1074,7 @@ function ensureDetail(det) {
 /* ---------- deep links ---------- */
 function shareURL(id) {
   const canonical = (D.meta.canonical_url || '').trim();
+  if (canonical && D.meta.share_pages) return canonical.replace(/\/?$/, '/') + 'c/' + id + '/';
   const base = canonical || location.href.split('#')[0];
   return base + '#' + id;
 }
